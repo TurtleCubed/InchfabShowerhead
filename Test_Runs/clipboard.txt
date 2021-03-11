@@ -1,0 +1,29 @@
+
+
+    def on_sub_close(self):
+        self.toplevel2.withdraw()
+
+    def run_simulate(self):
+        if self.toplevel2.state() == 'normal':
+            self.toplevel2.withdraw()
+        else:
+            self.toplevel2.deiconify()
+
+    def switch_image(self):
+        if self.which_image != 1:
+            my_img = tk.PhotoImage(file='1.gif')
+            self.which_image = 1
+        else:
+            my_img = tk.PhotoImage(file='2.gif')
+            self.which_image = 2
+        self.canvas1.create_image(50, 50, image=my_img, anchor='nw')
+
+
+    self.toplevel2.withdraw()
+    self.toplevel2.protocol("WM_DELETE_WINDOW", self.on_sub_close)
+    self.which_image = 0
+
+        self.text1.configure(xscrollcommand=self.scrollbar_x.set)
+        self.text1.configure(yscrollcommand=self.scrollbar_y.set)
+        self.scrollbar_x.configure(command=self.text1.xview)
+        self.scrollbar_y.configure(command=self.text1.yview)
