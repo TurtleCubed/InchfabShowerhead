@@ -4,6 +4,7 @@ cycler==0.10.0
 kiwisolver==1.2.0
 matplotlib==3.3.4
 numpy==1.19.1
+Pillow==8.1.2
 pygubu==0.10.6
 pygubu-designer==0.13
 pyparsing==2.4.7
