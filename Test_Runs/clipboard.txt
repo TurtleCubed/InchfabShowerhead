@@ -27,3 +27,16 @@
         self.text1.configure(yscrollcommand=self.scrollbar_y.set)
         self.scrollbar_x.configure(command=self.text1.xview)
         self.scrollbar_y.configure(command=self.text1.yview)
+
+
+
+
+        self.label_gas.grid(column='0', pady='5', row='12')
+        _, _, filenames = next(walk('Gas_Data\\'))
+        gas_list = []
+        for file in filenames:
+            gas_list.append(file[0:file.index('.json')])
+        self.combobox_gas = ttk.Combobox(self.frame1)
+        self.combobox_gas.configure(state='readonly', values=gas_list)
+        self.combobox_gas.grid(column='1', columnspan='3', pady='5', row='12')
+        self.combobox_gas.bind('<<ComboboxSelected>>', self.on_gas_select)
