@@ -11,5 +11,8 @@ pip install -r requirements.txt
 ```
 
 ## Usage
-Run Gui.py from the commandline and use the GUI as shown
-
+Run GUI.py from the commandline and use the GUI as shown
+```bash
+python GUI.py
+```
+![](sample.jpg)
