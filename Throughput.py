@@ -30,6 +30,8 @@ def downstream_pressure(p_upstream, throughput, length, shape, n_c, temp, r_0, g
 def throughput_p(p_upstream, p_downstream, length, shape, n_c, temp, r_0, gamma, mol_mass,
                  particle_diameter, viscosity, a, b, d, target):
     re_old = 300
+    if p_downstream > p_upstream:
+        raise RuntimeError('Downstream pressure greater than upstream pressure, no valid throughput found')
     q, re_new = throughput(re_old, p_upstream, p_downstream, length, shape, n_c, temp, r_0, gamma, mol_mass,
                            particle_diameter, viscosity, a, b, d, single_run=True)
     while abs((re_new - re_old) / re_new) > 0.001:
@@ -42,6 +44,8 @@ def throughput_p(p_upstream, p_downstream, length, shape, n_c, temp, r_0, gamma,
 def throughput_pd(p_downstream, p_upstream, length, shape, n_c, temp, r_0, gamma, mol_mass,
                   particle_diameter, viscosity, a, b, d, target):
     re_old = 30
+    if p_downstream > p_upstream:
+        raise RuntimeError('Downstream pressure greater than upstream pressure, no valid throughput found')
     q, re_new = throughput(re_old, p_upstream, p_downstream, length, shape, n_c, temp, r_0, gamma, mol_mass,
                            particle_diameter, viscosity, a, b, d, single_run=True)
     while abs((re_new - re_old) / re_new) > 0.001:
@@ -54,6 +58,8 @@ def throughput_pd(p_downstream, p_upstream, length, shape, n_c, temp, r_0, gamma
 def throughput_d(d, p_upstream, p_downstream, length, shape, n_c, temp, r_0, gamma, mol_mass,
                  particle_diameter, viscosity, a, b, target):
     re_old = 300
+    if p_downstream > p_upstream:
+        raise RuntimeError('Downstream pressure greater than upstream pressure, no valid throughput found')
     q, re_new = throughput(re_old, p_upstream, p_downstream, length, shape, n_c, temp, r_0, gamma, mol_mass,
                            particle_diameter, viscosity, a, b, d, single_run=True)
     while abs((re_new - re_old) / re_new) > 0.001:

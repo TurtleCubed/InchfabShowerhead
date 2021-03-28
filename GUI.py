@@ -335,13 +335,25 @@ class GUI:
                 self.currently_running = False
             if run:
                 self.append_txt('Optimizing...\n')
-                optimized_dim = self.optimize(shp_o, dim_o, width_o, len_o, shp_c, dim_c, width_c, len_c, thr, ch_p,
-                                                         gam, mol_m, par_d, vis, tem, gas_r)
-                self.update_text(self.entry_dim1, str(optimized_dim[0]))
-                self.update_text(self.entry_dim2, str(optimized_dim[1]))
-                self.update_text(self.entry_dim3, str(optimized_dim[2]))
+                try:
+                    optimized_dim, double, half = self.optimize(shp_o, dim_o, width_o, len_o, shp_c, dim_c, width_c,
+                                                                len_c, thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
+                    double = [a / 101325 * (60 * 10 ** 6) for a in double]
+                    half = [a / 101325 * (60 * 10 ** 6) for a in half]
+                    self.update_text(self.entry_highq1, str(round(double[0], 3)))
+                    self.update_text(self.entry_highq2, str(round(double[1], 3)))
+                    self.update_text(self.entry_highq3, str(round(double[2], 3)))
+                    self.update_text(self.entry_lowq1, str(round(half[0], 3)))
+                    self.update_text(self.entry_lowq2, str(round(half[1], 3)))
+                    self.update_text(self.entry_lowq3, str(round(half[2], 3)))
+                    self.update_text(self.entry_dim1, str(optimized_dim[0]))
+                    self.update_text(self.entry_dim2, str(optimized_dim[1]))
+                    self.update_text(self.entry_dim3, str(optimized_dim[2]))
+                    self.append_txt('...Finished!\n')
+                    self.text1.yview(tk.END)
+                except RuntimeError:
+                    self.append_txt('Run failed\n')
                 self.currently_running = False
-                self.append_txt('...Finished!\n')
 
     def optimize(self, shape_o, dim_o, width_o, length_o, shape_c, dim_c, width_c, length_c, throughput,
                  chamber_pressure, gamma, molar_mass, particle_diameter, viscosity, temp, r_0):
@@ -404,7 +416,18 @@ class GUI:
                     temp_devs[temp_devs.index(max(temp_devs))] = min(temp_devs) - 1
             else:
                 depth += 1
-        return current_dim
+        double_q = GasNetworkSim.sim(shape_o, current_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
+                                     throughput * 2, chamber_pressure, gamma, molar_mass, particle_diameter, viscosity,
+                                     temp, r_0)
+        half_q = GasNetworkSim.sim(shape_o, current_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
+                                   throughput * 0.5, chamber_pressure, gamma, molar_mass, particle_diameter, viscosity,
+                                   temp, r_0)
+        # TODO
+        # plus_dim = (current_dim[0] + 0.001*, current_dim[1], current_dim[2])
+        # plus1 = GasNetworkSim.sim(shape_o, current_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
+          #                          throughput, chamber_pressure, gamma, molar_mass, particle_diameter, viscosity,
+          #                         temp, r_0)
+        return current_dim, double_q, half_q
 
     def generate_graph(self, q):
         x = [1, 2, 3]
