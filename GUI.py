@@ -4,7 +4,7 @@ import GasNetworkSim
 import numpy as np
 import matplotlib.pyplot as plt
 import json
-from os import walk
+import os
 
 
 class GUI:
@@ -19,7 +19,7 @@ class GUI:
         self.combobox_hole_shape.configure(state='readonly', values='Circle Rectangle')
         self.combobox_hole_shape.grid(column='1', columnspan='3', pady='5', row='0')
         self.label_hole_dim = ttk.Label(self.frame1)
-        self.label_hole_dim.configure(text='Aperture Diameters')
+        self.label_hole_dim.configure(text='Aperture Dimensions (inches)')
         self.label_hole_dim.grid(column='0', pady='5', row='1')
         self.entry_hole1 = ttk.Entry(self.frame1)
         self.entry_hole1.configure(validate='all', width='5')
@@ -40,7 +40,7 @@ class GUI:
         self.entry_hole3.insert('0', _text_)
         self.entry_hole3.grid(column='3', pady='5', row='1')
         self.label_hole_length = ttk.Label(self.frame1)
-        self.label_hole_length.configure(text='Aperture Length')
+        self.label_hole_length.configure(text='Aperture Length (inches)')
         self.label_hole_length.grid(column='0', pady='5', row='4')
         self.entry_hole_length = ttk.Entry(self.frame1)
         self.entry_hole_length.configure(validate='none', width='5')
@@ -49,7 +49,7 @@ class GUI:
         self.entry_hole_length.insert('0', _text_)
         self.entry_hole_length.grid(column='2', pady='5', row='4')
         self.label_hole_width = ttk.Label(self.frame1)
-        self.label_hole_width.configure(text='Aperture Width')
+        self.label_hole_width.configure(text='Aperture Width (inches)')
         self.label_hole_width.grid(column='0', row='3')
         self.entry_hole_width = ttk.Entry(self.frame1)
         self.entry_hole_width.configure(width='5')
@@ -67,7 +67,7 @@ class GUI:
         self.combobox_connecting_shape.configure(state='readonly', values='Circle Rectangle')
         self.combobox_connecting_shape.grid(column='1', columnspan='3', pady='5', row='6')
         self.label_connecting_dim = ttk.Label(self.frame1)
-        self.label_connecting_dim.configure(text='Connecting Tube Diameter')
+        self.label_connecting_dim.configure(text='Connecting Tube Diameter (inches)')
         self.label_connecting_dim.grid(column='0', pady='5', row='7')
         self.entry_connecting_dim = ttk.Entry(self.frame1)
         self.entry_connecting_dim.configure(validate='none', width='5')
@@ -76,7 +76,7 @@ class GUI:
         self.entry_connecting_dim.insert('0', _text_)
         self.entry_connecting_dim.grid(column='2', pady='5', row='7')
         self.label_connecting_width = ttk.Label(self.frame1)
-        self.label_connecting_width.configure(text='Connecting Tube Width')
+        self.label_connecting_width.configure(text='Connecting Tube Width (inches)')
         self.label_connecting_width.grid(column='0', row='8')
         self.entry_connecting_width = ttk.Entry(self.frame1)
         self.entry_connecting_width.configure(width='4')
@@ -85,7 +85,7 @@ class GUI:
         self.entry_connecting_width.insert('0', _text_)
         self.entry_connecting_width.grid(column='2', row='8')
         self.label_connecting_length = ttk.Label(self.frame1)
-        self.label_connecting_length.configure(text='Connecting Tube Length')
+        self.label_connecting_length.configure(text='Connecting Tube Length (inches)')
         self.label_connecting_length.grid(column='0', pady='5', row='9')
         self.entry_connecting_length = ttk.Entry(self.frame1)
         self.entry_connecting_length.configure(validate='none', width='5')
@@ -97,7 +97,7 @@ class GUI:
         self.separator1.configure(orient='horizontal')
         self.separator1.grid(column='0', columnspan='4', ipadx='100', pady='5', row='10')
         self.label_throughput = ttk.Label(self.frame1)
-        self.label_throughput.configure(text='Throughput')
+        self.label_throughput.configure(text='Throughput (SCCM)')
         self.label_throughput.grid(column='0', pady='5', row='11')
         self.entry_throughput = ttk.Entry(self.frame1)
         self.entry_throughput.configure(validate='none', width='5')
@@ -106,7 +106,7 @@ class GUI:
         self.entry_throughput.insert('0', _text_)
         self.entry_throughput.grid(column='2', pady='5', row='11')
         self.label_chamber_pressure = ttk.Label(self.frame1)
-        self.label_chamber_pressure.configure(text='Chamber Pressure')
+        self.label_chamber_pressure.configure(text='Chamber Pressure (millitorr)')
         self.label_chamber_pressure.grid(column='0', pady='5', row='12')
         self.entry_chamber_pressure = ttk.Entry(self.frame1)
         self.entry_chamber_pressure.configure(validate='none', width='5')
@@ -120,15 +120,9 @@ class GUI:
         self.label_gas = ttk.Label(self.frame1)
         self.label_gas.configure(text='Gas')
         self.label_gas.grid(column='0', pady='5', row='14')
-
-        _, _, filenames = next(walk('Gas_Data\\'))
-        gas_list = []
-        for file in filenames:
-            gas_list.append(file[0:file.index('.json')])
         self.combobox_gas = ttk.Combobox(self.frame1)
-        self.combobox_gas.configure(state='readonly', values=gas_list)
+        self.combobox_gas.configure(state='readonly', values='He N2 O2 Ar')
         self.combobox_gas.grid(column='1', columnspan='3', pady='5', row='14')
-        self.combobox_gas.bind('<<ComboboxSelected>>', self.on_gas_select)
         self.label_gamma = ttk.Label(self.frame1)
         self.label_gamma.configure(text='Gamma')
         self.label_gamma.grid(column='0', pady='5', row='15')
@@ -138,7 +132,7 @@ class GUI:
         self.entry_gamma.insert('0', _text_)
         self.entry_gamma.grid(column='1', columnspan='3', pady='5', row='15')
         self.label_molar_mass = ttk.Label(self.frame1)
-        self.label_molar_mass.configure(text='Molar Mass')
+        self.label_molar_mass.configure(text='Molar Mass (Kg/mol)')
         self.label_molar_mass.grid(column='0', pady='5', row='16')
         self.entry_molar_mass = ttk.Entry(self.frame1)
         _text_ = '''0.03756'''
@@ -146,7 +140,7 @@ class GUI:
         self.entry_molar_mass.insert('0', _text_)
         self.entry_molar_mass.grid(column='1', columnspan='3', padx='5', row='16')
         self.label_particle_diameter = ttk.Label(self.frame1)
-        self.label_particle_diameter.configure(text='Particle Diameter')
+        self.label_particle_diameter.configure(text='Particle Diameter (m)')
         self.label_particle_diameter.grid(column='0', pady='5', row='17')
         self.entry_particle_diameter = ttk.Entry(self.frame1)
         _text_ = '''0.0000000003448'''
@@ -154,7 +148,7 @@ class GUI:
         self.entry_particle_diameter.insert('0', _text_)
         self.entry_particle_diameter.grid(column='1', columnspan='3', pady='5', row='17')
         self.label_viscosity = ttk.Label(self.frame1)
-        self.label_viscosity.configure(text='Viscosity')
+        self.label_viscosity.configure(text='Viscosity (Pa*s)')
         self.label_viscosity.grid(column='0', pady='5', row='18')
         self.entry_viscosity = ttk.Entry(self.frame1)
         _text_ = '''0.00002136'''
@@ -165,7 +159,7 @@ class GUI:
         self.separator3.configure(orient='horizontal')
         self.separator3.grid(column='0', columnspan='4', ipadx='100', pady='5', row='19')
         self.label_temperature = ttk.Label(self.frame1)
-        self.label_temperature.configure(text='Temperature')
+        self.label_temperature.configure(text='Temperature (K)')
         self.label_temperature.grid(column='0', pady='5', row='20')
         self.entry_temperature = ttk.Entry(self.frame1)
         _text_ = '''298'''
@@ -173,7 +167,7 @@ class GUI:
         self.entry_temperature.insert('0', _text_)
         self.entry_temperature.grid(column='2', pady='5', row='20')
         self.label_r = ttk.Label(self.frame1)
-        self.label_r.configure(text='Gas Constant')
+        self.label_r.configure(text='Gas Constant (J/mol*K)')
         self.label_r.grid(column='0', pady='5', row='21')
         self.entry_gas_constant = ttk.Entry(self.frame1)
         _text_ = '''8.314'''
@@ -278,6 +272,12 @@ class GUI:
         self.frame2.pack(side='top')
         self.toplevel2.configure(height='200', width='200')
 
+        _, _, filenames = next(os.walk(os.path.join('Gas_Data')))
+        gas_list = []
+        for file in filenames:
+            gas_list.append(file[0:file.index('.json')])
+        self.combobox_gas.configure(state='readonly', values=gas_list)
+        self.combobox_gas.bind('<<ComboboxSelected>>', self.on_gas_select)
         self.combobox_hole_shape.bind('<<ComboboxSelected>>', self.on_hole_shape_select)
         self.combobox_connecting_shape.bind('<<ComboboxSelected>>', self.on_connecting_shape_select)
         self.label_hole_width.grid_forget()
@@ -350,7 +350,6 @@ class GUI:
                     self.update_text(self.entry_dim2, str(optimized_dim[1]))
                     self.update_text(self.entry_dim3, str(optimized_dim[2]))
                     self.append_txt('...Finished!\n')
-                    self.text1.yview(tk.END)
                 except RuntimeError:
                     self.append_txt('Run failed\n')
                 self.currently_running = False
@@ -441,8 +440,8 @@ class GUI:
         plt.plot(x, y)
         plt.plot(x, [mean] * 3)
         plt.tight_layout()
-        plt.savefig('temp\\plot.png')
-        return 'temp\\plot.png'
+        plt.savefig(os.path.join('temp', 'plot.png'))
+        return os.path.join('temp', 'plot.png')
 
     def on_hole_shape_select(self, eventObject):
         if self.combobox_hole_shape.get() == 'Circle':
@@ -508,6 +507,7 @@ class GUI:
         self.text1.insert('end', text)
         self.text1.update()
         self.text1.config(state='disabled')
+        self.text1.yview(tk.END)
 
     def run(self):
         self.mainwindow.mainloop()
