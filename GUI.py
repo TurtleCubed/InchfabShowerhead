@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import json
 import os
+import shutil
 
 
 class GUI:
@@ -29,13 +30,13 @@ class GUI:
         self.entry_hole1.grid(column='1', pady='5', row='1')
         self.entry_hole2 = ttk.Entry(self.frame1)
         self.entry_hole2.configure(width='5')
-        _text_ = '''0.055'''
+        _text_ = '''0.052'''
         self.entry_hole2.delete('0', 'end')
         self.entry_hole2.insert('0', _text_)
         self.entry_hole2.grid(column='2', pady='5', row='1')
         self.entry_hole3 = ttk.Entry(self.frame1)
         self.entry_hole3.configure(width='5')
-        _text_ = '''0.079'''
+        _text_ = '''0.075'''
         self.entry_hole3.delete('0', 'end')
         self.entry_hole3.insert('0', _text_)
         self.entry_hole3.grid(column='3', pady='5', row='1')
@@ -191,83 +192,100 @@ class GUI:
         self.scrollbar_x.configure(orient='horizontal')
         self.scrollbar_x.grid(column='0', ipadx='180', row='1', sticky='n')
         self.text1 = tk.Text(self.frame2)
-        self.text1.configure(height='15', state='disabled', width='50', wrap='none')
+        self.text1.configure(height='20', state='disabled', width='75', wrap='none')
         self.text1.grid(column='0', row='0')
         self.text1.rowconfigure('0', pad='0')
-        self.text1.configure(xscrollcommand=self.scrollbar_x.set)
-        self.text1.configure(yscrollcommand=self.scrollbar_y.set)
-        self.scrollbar_x.configure(command=self.text1.xview)
-        self.scrollbar_y.configure(command=self.text1.yview)
-        self.canvas1 = tk.Canvas(self.frame2)
-        self.canvas1.configure(height='301', width='401')
-        self.canvas1.grid(column='2', columnspan='3', row='0', rowspan='2')
-        self.canvas1.rowconfigure('0', pad='0')
+        self.label_image = ttk.Label(self.frame2)
+        self.blank_png = tk.PhotoImage(file='blank.png')
+        self.label_image.configure(image=self.blank_png)
+        self.label_image.grid(column='2', columnspan='2', row='0')
         self.label_optimized = ttk.Label(self.frame2)
         self.label_optimized.configure(text='Optimized Dimensions')
-        self.label_optimized.grid(column='0', row='3')
+        self.label_optimized.grid(column='0', row='4')
         self.entry_dim1 = ttk.Entry(self.frame2)
         self.entry_dim1.configure(state='readonly')
-        self.entry_dim1.grid(column='2', row='3')
+        self.entry_dim1.grid(column='2', row='4')
         self.entry_dim2 = ttk.Entry(self.frame2)
         self.entry_dim2.configure(state='readonly')
-        self.entry_dim2.grid(column='3', row='3')
+        self.entry_dim2.grid(column='3', row='4')
         self.entry_dim3 = ttk.Entry(self.frame2)
         self.entry_dim3.configure(state='readonly')
-        self.entry_dim3.grid(column='4', row='3')
+        self.entry_dim3.grid(column='4', row='4')
         self.separator4 = ttk.Separator(self.frame2)
         self.separator4.configure(orient='horizontal')
-        self.separator4.grid(column='0', columnspan='5', ipadx='300', pady='5', row='4')
-        self.label_high_q = ttk.Label(self.frame2)
-        self.label_high_q.configure(text='With 200% Throughput')
-        self.label_high_q.grid(column='0', row='5')
-        self.entry_highq1 = ttk.Entry(self.frame2)
-        self.entry_highq1.configure(state='readonly')
-        self.entry_highq1.grid(column='2', row='5')
-        self.entry_highq2 = ttk.Entry(self.frame2)
-        self.entry_highq2.configure(state='readonly')
-        self.entry_highq2.grid(column='3', row='5')
-        self.entry_highq3 = ttk.Entry(self.frame2)
-        self.entry_highq3.configure(state='readonly')
-        self.entry_highq3.grid(column='4', row='5')
-        self.label_low_q = ttk.Label(self.frame2)
-        self.label_low_q.configure(text='With 50% Throughput')
-        self.label_low_q.grid(column='0', row='6')
-        self.entry_lowq1 = ttk.Entry(self.frame2)
-        self.entry_lowq1.configure(state='readonly')
-        self.entry_lowq1.grid(column='2', row='6')
-        self.entry_lowq2 = ttk.Entry(self.frame2)
-        self.entry_lowq2.configure(state='readonly')
-        self.entry_lowq2.grid(column='3', row='6')
-        self.entry_lowq3 = ttk.Entry(self.frame2)
-        self.entry_lowq3.configure(state='readonly')
-        self.entry_lowq3.grid(column='4', row='6')
-        self.separator5 = ttk.Separator(self.frame2)
-        self.separator5.configure(orient='horizontal')
-        self.separator5.grid(column='0', columnspan='5', ipadx='300', pady='5', row='7')
-        self.label_plus1 = ttk.Label(self.frame2)
-        self.label_plus1.configure(text='First opening 1mil too large')
-        self.label_plus1.grid(column='0', row='8')
-        self.entry12 = ttk.Entry(self.frame2)
-        self.entry12.configure(state='readonly')
-        self.entry12.grid(column='2', row='8')
-        self.entry13 = ttk.Entry(self.frame2)
-        self.entry13.configure(state='readonly')
-        self.entry13.grid(column='3', row='8')
-        self.entry14 = ttk.Entry(self.frame2)
-        self.entry14.configure(state='readonly')
-        self.entry14.grid(column='4', row='8')
-        self.label_minus1 = ttk.Label(self.frame2)
-        self.label_minus1.configure(text='First opening 1mil too small')
-        self.label_minus1.grid(column='0', row='9')
-        self.entry15 = ttk.Entry(self.frame2)
-        self.entry15.configure(state='readonly')
-        self.entry15.grid(column='2', row='9')
-        self.entry16 = ttk.Entry(self.frame2)
-        self.entry16.configure(state='readonly')
-        self.entry16.grid(column='3', row='9')
-        self.entry17 = ttk.Entry(self.frame2)
-        self.entry17.configure(state='readonly')
-        self.entry17.grid(column='4', row='9')
+        self.separator4.grid(column='0', columnspan='5', ipadx='300', pady='5', row='5')
+        self.notebook_tolerances = ttk.Notebook(self.frame2)
+        self.frame_default = ttk.Frame(self.notebook_tolerances)
+        self.label_defaultcv = ttk.Label(self.frame_default)
+        self.label_defaultcv.configure(text='Coefficient of Variation:')
+        self.label_defaultcv.grid(column='0', row='0')
+        self.entry_defaultcv = ttk.Entry(self.frame_default)
+        self.entry_defaultcv.configure(state='readonly')
+        self.entry_defaultcv.grid(column='1', row='0')
+        self.label_imagedefault = ttk.Label(self.frame_default)
+        self.blank_png = tk.PhotoImage(file='blank.png')
+        self.label_imagedefault.configure(image=self.blank_png)
+        self.label_imagedefault.grid(column='0', columnspan='2', row='1')
+        self.frame_default.pack(side='top')
+        self.notebook_tolerances.add(self.frame_default, text='Default')
+        self.frame_highq = ttk.Frame(self.notebook_tolerances)
+        self.label_highqcv = ttk.Label(self.frame_highq)
+        self.label_highqcv.configure(text='Coefficient of Variation:')
+        self.label_highqcv.grid(column='0', row='0')
+        self.entry_highqcv = ttk.Entry(self.frame_highq)
+        self.entry_highqcv.configure(state='readonly')
+        self.entry_highqcv.grid(column='1', row='0')
+        self.label_imagehighq = ttk.Label(self.frame_highq)
+        self.blank_png = tk.PhotoImage(file='blank.png')
+        self.label_imagehighq.configure(image=self.blank_png)
+        self.label_imagehighq.grid(column='0', columnspan='2', row='1')
+        self.frame_highq.configure(height='200', width='200')
+        self.frame_highq.pack(side='top')
+        self.notebook_tolerances.add(self.frame_highq, text='200% Throughput')
+        self.frame_lowq = ttk.Frame(self.notebook_tolerances)
+        self.label_lowqcv = ttk.Label(self.frame_lowq)
+        self.label_lowqcv.configure(text='Coefficient of Variation:')
+        self.label_lowqcv.grid(column='0', row='0')
+        self.entry_lowqcv = ttk.Entry(self.frame_lowq)
+        self.entry_lowqcv.configure(state='readonly')
+        self.entry_lowqcv.grid(column='1', row='0')
+        self.label_imagelowq = ttk.Label(self.frame_lowq)
+        self.blank_png = tk.PhotoImage(file='blank.png')
+        self.label_imagelowq.configure(image=self.blank_png)
+        self.label_imagelowq.grid(column='0', columnspan='2', row='1')
+        self.frame_lowq.configure(height='200', width='200')
+        self.frame_lowq.pack(side='top')
+        self.notebook_tolerances.add(self.frame_lowq, text='50% Throughput')
+        self.frame_small1 = ttk.Frame(self.notebook_tolerances)
+        self.label_smallcv = ttk.Label(self.frame_small1)
+        self.label_smallcv.configure(text='Coefficient of Variation:')
+        self.label_smallcv.grid(column='0', row='0')
+        self.entry_smallcv = ttk.Entry(self.frame_small1)
+        self.entry_smallcv.configure(state='readonly')
+        self.entry_smallcv.grid(column='1', row='0')
+        self.label_imagesmall = ttk.Label(self.frame_small1)
+        self.blank_png = tk.PhotoImage(file='blank.png')
+        self.label_imagesmall.configure(image=self.blank_png)
+        self.label_imagesmall.grid(column='0', columnspan='2', row='1')
+        self.frame_small1.configure(height='200', width='200')
+        self.frame_small1.pack(side='top')
+        self.notebook_tolerances.add(self.frame_small1, text='1st Opening 1 mil Small')
+        self.frame_large1 = ttk.Frame(self.notebook_tolerances)
+        self.label_largecv = ttk.Label(self.frame_large1)
+        self.label_largecv.configure(text='Coefficient of Variation:')
+        self.label_largecv.grid(column='0', row='0')
+        self.entry_largecv = ttk.Entry(self.frame_large1)
+        self.entry_largecv.configure(state='readonly')
+        self.entry_largecv.grid(column='1', row='0')
+        self.label_imagelarge = ttk.Label(self.frame_large1)
+        self.blank_png = tk.PhotoImage(file='blank.png')
+        self.label_imagelarge.configure(image=self.blank_png)
+        self.label_imagelarge.grid(column='0', columnspan='2', row='1')
+        self.frame_large1.configure(height='200', width='200')
+        self.frame_large1.pack(side='top')
+        self.notebook_tolerances.add(self.frame_large1, text='1st Opening 1 mil Large')
+        self.notebook_tolerances.configure(height='350', width='450')
+        self.notebook_tolerances.grid(column='0', columnspan='5', row='11')
         self.frame2.configure(height='200', width='200')
         self.frame2.pack(side='top')
         self.toplevel2.configure(height='200', width='200')
@@ -278,6 +296,10 @@ class GUI:
             gas_list.append(file[0:file.index('.json')])
         self.combobox_gas.configure(state='readonly', values=gas_list)
         self.combobox_gas.bind('<<ComboboxSelected>>', self.on_gas_select)
+        self.scrollbar_x.configure(command=self.text1.xview)
+        self.scrollbar_y.configure(command=self.text1.yview)
+        self.text1.configure(xscrollcommand=self.scrollbar_x.set)
+        self.text1.configure(yscrollcommand=self.scrollbar_y.set)
         self.combobox_hole_shape.bind('<<ComboboxSelected>>', self.on_hole_shape_select)
         self.combobox_connecting_shape.bind('<<ComboboxSelected>>', self.on_connecting_shape_select)
         self.label_hole_width.grid_forget()
@@ -289,6 +311,10 @@ class GUI:
         self.toplevel1.protocol("WM_DELETE_WINDOW", self.on_main_close)
         self.my_image = tk.PhotoImage()
         self.currently_running = False
+        self.successful_run = False
+
+        self.notebook_tolerances.bind('<<NotebookTabChanged>>', self.on_tab_select)
+        self.tol_dict = {}
 
         # Main widget
         self.mainwindow = self.toplevel1
@@ -301,6 +327,7 @@ class GUI:
             # Parse data from the main window
             # Check if each is a valid entry
             self.currently_running = True
+            self.successful_run = False
             try:
                 if self.combobox_hole_shape.get() == 'Circle':
                     shp_o = 'circle'
@@ -336,26 +363,24 @@ class GUI:
             if run:
                 self.append_txt('Optimizing...\n')
                 try:
-                    optimized_dim, double, half = self.optimize(shp_o, dim_o, width_o, len_o, shp_c, dim_c, width_c,
-                                                                len_c, thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
-                    double = [a / 101325 * (60 * 10 ** 6) for a in double]
-                    half = [a / 101325 * (60 * 10 ** 6) for a in half]
-                    self.update_text(self.entry_highq1, str(round(double[0], 3)))
-                    self.update_text(self.entry_highq2, str(round(double[1], 3)))
-                    self.update_text(self.entry_highq3, str(round(double[2], 3)))
-                    self.update_text(self.entry_lowq1, str(round(half[0], 3)))
-                    self.update_text(self.entry_lowq2, str(round(half[1], 3)))
-                    self.update_text(self.entry_lowq3, str(round(half[2], 3)))
+                    optimized_dim = self.optimize(shp_o, dim_o, width_o, len_o, shp_c, dim_c, width_c,
+                                                  len_c, thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
                     self.update_text(self.entry_dim1, str(optimized_dim[0]))
                     self.update_text(self.entry_dim2, str(optimized_dim[1]))
                     self.update_text(self.entry_dim3, str(optimized_dim[2]))
                     self.append_txt('...Finished!\n')
+                    self.successful_run = True
                 except RuntimeError:
                     self.append_txt('Run failed\n')
                 self.currently_running = False
 
     def optimize(self, shape_o, dim_o, width_o, length_o, shape_c, dim_c, width_c, length_c, throughput,
                  chamber_pressure, gamma, molar_mass, particle_diameter, viscosity, temp, r_0):
+        try:
+            shutil.rmtree(os.path.join('temp'))
+        except FileNotFoundError:
+            pass
+        self.tol_dict.clear()
         current_dim = dim_o
         depth = 0
         max_depth = len(current_dim)
@@ -365,7 +390,7 @@ class GUI:
         self.append_txt('\n')
         q = GasNetworkSim.sim(shape_o, current_dim, width_o, length_o, shape_c, dim_c, width_c, length_c, throughput,
                               chamber_pressure, gamma, molar_mass, particle_diameter, viscosity, temp, r_0)
-        self.switch_image(self.generate_graph(q))
+        self.update_image(self.label_image, self.generate_graph(q, 'plot'))
 
         mean = np.mean(q)
         std = np.std(q)
@@ -392,7 +417,7 @@ class GUI:
             temp_q = GasNetworkSim.sim(shape_o, temp_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
                                        throughput, chamber_pressure, gamma, molar_mass, particle_diameter, viscosity,
                                        temp, r_0)
-            self.switch_image(self.generate_graph(temp_q))
+            self.update_image(self.label_image, self.generate_graph(temp_q, 'plot'))
             temp_mean = np.mean(temp_q)
             temp_std = np.std(temp_q)
             temp_cv = temp_std / temp_mean
@@ -415,33 +440,75 @@ class GUI:
                     temp_devs[temp_devs.index(max(temp_devs))] = min(temp_devs) - 1
             else:
                 depth += 1
-        double_q = GasNetworkSim.sim(shape_o, current_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
+        q_tol = [None]*5
+        q_tol[0] = GasNetworkSim.sim(shape_o, current_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
+                                     throughput, chamber_pressure, gamma, molar_mass, particle_diameter, viscosity,
+                                     temp, r_0)
+        q_tol[1] = GasNetworkSim.sim(shape_o, current_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
                                      throughput * 2, chamber_pressure, gamma, molar_mass, particle_diameter, viscosity,
                                      temp, r_0)
-        half_q = GasNetworkSim.sim(shape_o, current_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
-                                   throughput * 0.5, chamber_pressure, gamma, molar_mass, particle_diameter, viscosity,
-                                   temp, r_0)
-        # TODO
-        # plus_dim = (current_dim[0] + 0.001*, current_dim[1], current_dim[2])
-        # plus1 = GasNetworkSim.sim(shape_o, current_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
-          #                          throughput, chamber_pressure, gamma, molar_mass, particle_diameter, viscosity,
-          #                         temp, r_0)
-        return current_dim, double_q, half_q
+        q_tol[2] = GasNetworkSim.sim(shape_o, current_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
+                                     throughput * 0.5, chamber_pressure, gamma, molar_mass, particle_diameter,
+                                     viscosity,
+                                     temp, r_0)
+        small_dim = (current_dim[0] - 0.001, current_dim[1], current_dim[2])
+        large_dim = (current_dim[0] + 0.001, current_dim[1], current_dim[2])
+        q_tol[3] = GasNetworkSim.sim(shape_o, small_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
+                                     throughput, chamber_pressure, gamma, molar_mass, particle_diameter, viscosity,
+                                     temp, r_0)
+        q_tol[4] = GasNetworkSim.sim(shape_o, large_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
+                                     throughput, chamber_pressure, gamma, molar_mass, particle_diameter, viscosity,
+                                     temp, r_0)
+        for i in range(len(q_tol)):
+            qs = q_tol[i]
+            cv = np.std(q_tol[i]) / np.mean(q_tol[i])
+            image = self.generate_graph(q_tol[i], str(i))
+            self.tol_dict[i] = {'Q': qs, 'CV': cv, 'IMAGE': image}
+        self.update_image(self.label_image, self.tol_dict[0]['IMAGE'])
+        return current_dim
 
-    def generate_graph(self, q):
+    def on_tab_select(self, event):
+        if self.successful_run:
+            selected = self.notebook_tolerances.index(self.notebook_tolerances.select())
+            tab_dict = self.tol_dict[selected]
+            if selected == 0:
+                self.update_text(self.entry_defaultcv, str(round(tab_dict['CV'], 5)))
+                self.update_image(self.label_imagedefault, tab_dict['IMAGE'])
+            elif selected == 1:
+                self.update_text(self.entry_highqcv, str(round(tab_dict['CV'], 5)))
+                self.update_image(self.label_imagehighq, tab_dict['IMAGE'])
+            elif selected == 2:
+                self.update_text(self.entry_lowqcv, str(round(tab_dict['CV'], 5)))
+                self.update_image(self.label_imagelowq, tab_dict['IMAGE'])
+            elif selected == 3:
+                self.update_text(self.entry_smallcv, str(round(tab_dict['CV'], 5)))
+                self.update_image(self.label_imagesmall, tab_dict['IMAGE'])
+            elif selected == 4:
+                self.update_text(self.entry_largecv, str(round(tab_dict['CV'], 5)))
+                self.update_image(self.label_imagelarge, tab_dict['IMAGE'])
+            else:
+                pass
+
+    def generate_graph(self, q, name):
         x = [1, 2, 3]
         y = [a / 101325 * (60 * 10 ** 6) for a in q]
         mean = np.mean(y)
         px = 1/plt.rcParams['figure.dpi']
-        plt.subplots(figsize=(400*px, 300*px))
+        plt.subplots(figsize=(500*px, 300*px))
         plt.xlabel('Opening')
         plt.ylabel('Throughput (SCCM)')
         plt.ylim(mean * 0.75, mean * 1.25)
         plt.plot(x, y)
         plt.plot(x, [mean] * 3)
+        for i in range(len(y)):
+            plt.text(i + 1, y[i] + mean * 0.02, str(round(y[i], 2)), horizontalalignment='center')
         plt.tight_layout()
-        plt.savefig(os.path.join('temp', 'plot.png'))
-        return os.path.join('temp', 'plot.png')
+        try:
+            os.mkdir('temp')
+        except FileExistsError:
+            pass
+        plt.savefig(os.path.join('temp', name + '.png'))
+        return os.path.join('temp', name + '.png')
 
     def on_hole_shape_select(self, eventObject):
         if self.combobox_hole_shape.get() == 'Circle':
@@ -497,10 +564,9 @@ class GUI:
         entry.configure(state='readonly')
         entry.update()
 
-    def switch_image(self, file_name):
-        self.my_image.configure(file=file_name)
-        self.canvas1.create_image(0, 0, image=self.my_image, anchor='nw')
-        self.canvas1.update()
+    def update_image(self, label, file_name):
+        label.image = tk.PhotoImage(file=file_name)
+        label.config(image=label.image)
 
     def append_txt(self, text):
         self.text1.config(state='normal')
