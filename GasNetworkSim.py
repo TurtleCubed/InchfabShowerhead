@@ -33,9 +33,10 @@ def sim(shape_o, dim_o, width_o, length_o, shape_c, dim_c, width_c, length_c, th
         except RuntimeError:
             if i == 0:
                 message = 'First opening is likely too small'
+            else:
+                message = ''
             raise RuntimeError('Failed to obtain a pressure guess for opening ' + str(i + 1) + '. ' + message)
         p_guesses[i] = p_up
-
 
     def find_p(p_guess):
         p_up = p_guess
@@ -45,12 +46,12 @@ def sim(shape_o, dim_o, width_o, length_o, shape_c, dim_c, width_c, length_c, th
 
         for i in range(len(dim_o)):
             length = length_c
-            if i is 0:
+            if i == 0:
                 length = length_c / 2
             p[i] = Throughput.downstream_pressure(p_up, q, length, shape_c, 0, temp, r_0, gamma,
                                                   molar_mass, particle_diameter, viscosity, dim_c, width_c, dim_c,
                                                   p_down=chamber_pressure)
-            if i is not len(dim_o) - 1:
+            if i != len(dim_o) - 1:
                 opening_q[i] = Throughput.throughput_p(p[i], chamber_pressure, length_o, shape_o, 0, temp, r_0, gamma,
                                                        molar_mass, particle_diameter, viscosity, dim_o[i], width_o,
                                                        dim_o[i], 0)
@@ -74,12 +75,12 @@ def sim(shape_o, dim_o, width_o, length_o, shape_c, dim_c, width_c, length_c, th
 
     for i in range(len(dim_o)):
         length = length_c
-        if i is 0:
+        if i == 0:
             length = length_c / 2
         p[i] = Throughput.downstream_pressure(p_up, q, length, shape_c, 0, temp, r_0, gamma,
                                               molar_mass, particle_diameter, viscosity, dim_c, width_c, dim_c,
                                               p_down=chamber_pressure)
-        if i is not len(dim_o) - 1:
+        if i != len(dim_o) - 1:
             opening_q[i] = Throughput.throughput_p(p[i], chamber_pressure, length_o, shape_o, 0, temp, r_0, gamma,
                                                    molar_mass, particle_diameter, viscosity, dim_o[i], width_o,
                                                    dim_o[i], 0)

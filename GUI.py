@@ -292,7 +292,7 @@ class GUI:
         self.frame2.pack(side='top')
         self.toplevel2.configure(height='200', width='200')
 
-        vcmd = (self.frame1.register(self.onValidate), '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        vcmd = (self.frame1.register(self.on_validate), '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
         self.entry_hole1.config(validatecommand=vcmd)
         self.entry_hole2.config(validatecommand=vcmd)
         self.entry_hole_width.config(validatecommand=vcmd)
@@ -385,6 +385,7 @@ class GUI:
                     self.successful_run = True
                 except RuntimeError:
                     self.append_txt('Run failed\n')
+                    self.successful_run = False
                 self.currently_running = False
 
     def optimize(self, shape_o, dim_o, width_o, length_o, shape_c, dim_c, width_c, length_c, throughput,
@@ -401,8 +402,10 @@ class GUI:
         self.append_txt('Running with dimensions:')
         self.append_txt(str(current_dim))
         self.append_txt('\n')
+
         q = GasNetworkSim.sim(shape_o, current_dim, width_o, length_o, shape_c, dim_c, width_c, length_c, throughput,
                               chamber_pressure, gamma, molar_mass, particle_diameter, viscosity, temp, r_0)
+
         self.update_image(self.label_image, self.generate_graph(q, 'plot'))
 
         mean = np.mean(q)
@@ -420,9 +423,10 @@ class GUI:
         while depth < max_depth:
             temp_dim = current_dim.copy()
             if devs[index.index(depth)] < 0:
-                temp_dim[index.index(depth)] += 0.001
+                temp_dim[index.index(depth)] = round(temp_dim[index.index(depth)] + 0.001, 6)
+
             else:
-                temp_dim[index.index(depth)] -= 0.001
+                temp_dim[index.index(depth)] = round(temp_dim[index.index(depth)] - 0.001, 6)
 
             self.append_txt('Running with dimensions:')
             self.append_txt(str(temp_dim))
@@ -480,8 +484,10 @@ class GUI:
         self.update_image(self.label_image, self.tol_dict[0]['IMAGE'])
         return current_dim
 
-    def onValidate(self, d, i, P, s, S, v, V, W):
+    def on_validate(self, d, i, P, s, S, v, V, W):
         try:
+            if P == '':
+                return True
             float(P)
             return True
         except ValueError:
@@ -529,6 +535,7 @@ class GUI:
         except FileExistsError:
             pass
         plt.savefig(os.path.join('temp', name + '.png'))
+        plt.close('all')
         return os.path.join('temp', name + '.png')
 
     def on_hole_shape_select(self, eventObject):
@@ -536,8 +543,8 @@ class GUI:
             self.label_hole_dim.config(text='Aperture Diameters')
             self.entry_hole_width.grid_forget()
             self.label_hole_width.grid_forget()
-            self.entry_hole_width.delete('0', 'end')
             self.entry_hole_width.insert('0', '0')
+            self.entry_hole_width.delete('1', 'end')
         else:
             self.label_hole_dim.config(text='Aperture Height')
             self.label_hole_width.grid(column=0, row=3)
@@ -548,8 +555,8 @@ class GUI:
             self.label_connecting_dim.config(text='Connecting Tube Diameter')
             self.entry_connecting_width.grid_forget()
             self.label_connecting_width.grid_forget()
-            self.entry_connecting_width.delete('0', 'end')
             self.entry_connecting_width.insert('0', '0')
+            self.entry_connecting_width.delete('1', 'end')
         else:
             self.label_connecting_dim.config(text='Connecting Tube Height')
             self.label_connecting_width.grid(column=0, row=8)
