@@ -23,19 +23,19 @@ class GUI:
         self.label_hole_dim.configure(text='Aperture Dimensions (inches)')
         self.label_hole_dim.grid(column='0', pady='5', row='1')
         self.entry_hole1 = ttk.Entry(self.frame1)
-        self.entry_hole1.configure(validate='all', width='5')
+        self.entry_hole1.configure(validate='key', width='5')
         _text_ = '''0.039'''
         self.entry_hole1.delete('0', 'end')
         self.entry_hole1.insert('0', _text_)
         self.entry_hole1.grid(column='1', pady='5', row='1')
         self.entry_hole2 = ttk.Entry(self.frame1)
-        self.entry_hole2.configure(width='5')
+        self.entry_hole2.configure(validate='key', width='5')
         _text_ = '''0.052'''
         self.entry_hole2.delete('0', 'end')
         self.entry_hole2.insert('0', _text_)
         self.entry_hole2.grid(column='2', pady='5', row='1')
         self.entry_hole3 = ttk.Entry(self.frame1)
-        self.entry_hole3.configure(width='5')
+        self.entry_hole3.configure(validate='key', width='5')
         _text_ = '''0.075'''
         self.entry_hole3.delete('0', 'end')
         self.entry_hole3.insert('0', _text_)
@@ -44,7 +44,7 @@ class GUI:
         self.label_hole_length.configure(text='Aperture Length (inches)')
         self.label_hole_length.grid(column='0', pady='5', row='4')
         self.entry_hole_length = ttk.Entry(self.frame1)
-        self.entry_hole_length.configure(validate='none', width='5')
+        self.entry_hole_length.configure(validate='key', width='5')
         _text_ = '''0.0625'''
         self.entry_hole_length.delete('0', 'end')
         self.entry_hole_length.insert('0', _text_)
@@ -53,7 +53,7 @@ class GUI:
         self.label_hole_width.configure(text='Aperture Width (inches)')
         self.label_hole_width.grid(column='0', row='3')
         self.entry_hole_width = ttk.Entry(self.frame1)
-        self.entry_hole_width.configure(width='5')
+        self.entry_hole_width.configure(validate='key', width='5')
         _text_ = '''0'''
         self.entry_hole_width.delete('0', 'end')
         self.entry_hole_width.insert('0', _text_)
@@ -71,7 +71,7 @@ class GUI:
         self.label_connecting_dim.configure(text='Connecting Tube Diameter (inches)')
         self.label_connecting_dim.grid(column='0', pady='5', row='7')
         self.entry_connecting_dim = ttk.Entry(self.frame1)
-        self.entry_connecting_dim.configure(validate='none', width='5')
+        self.entry_connecting_dim.configure(validate='key', width='5')
         _text_ = '''0.125'''
         self.entry_connecting_dim.delete('0', 'end')
         self.entry_connecting_dim.insert('0', _text_)
@@ -80,7 +80,7 @@ class GUI:
         self.label_connecting_width.configure(text='Connecting Tube Width (inches)')
         self.label_connecting_width.grid(column='0', row='8')
         self.entry_connecting_width = ttk.Entry(self.frame1)
-        self.entry_connecting_width.configure(width='4')
+        self.entry_connecting_width.configure(validate='key', width='4')
         _text_ = '''0'''
         self.entry_connecting_width.delete('0', 'end')
         self.entry_connecting_width.insert('0', _text_)
@@ -89,7 +89,7 @@ class GUI:
         self.label_connecting_length.configure(text='Connecting Tube Length (inches)')
         self.label_connecting_length.grid(column='0', pady='5', row='9')
         self.entry_connecting_length = ttk.Entry(self.frame1)
-        self.entry_connecting_length.configure(validate='none', width='5')
+        self.entry_connecting_length.configure(validate='key', width='5')
         _text_ = '''1.31'''
         self.entry_connecting_length.delete('0', 'end')
         self.entry_connecting_length.insert('0', _text_)
@@ -101,7 +101,7 @@ class GUI:
         self.label_throughput.configure(text='Throughput (SCCM)')
         self.label_throughput.grid(column='0', pady='5', row='11')
         self.entry_throughput = ttk.Entry(self.frame1)
-        self.entry_throughput.configure(validate='none', width='5')
+        self.entry_throughput.configure(validate='key', width='5')
         _text_ = '''10'''
         self.entry_throughput.delete('0', 'end')
         self.entry_throughput.insert('0', _text_)
@@ -110,7 +110,7 @@ class GUI:
         self.label_chamber_pressure.configure(text='Chamber Pressure (millitorr)')
         self.label_chamber_pressure.grid(column='0', pady='5', row='12')
         self.entry_chamber_pressure = ttk.Entry(self.frame1)
-        self.entry_chamber_pressure.configure(validate='none', width='5')
+        self.entry_chamber_pressure.configure(validate='key', width='5')
         _text_ = '''50'''
         self.entry_chamber_pressure.delete('0', 'end')
         self.entry_chamber_pressure.insert('0', _text_)
@@ -163,6 +163,7 @@ class GUI:
         self.label_temperature.configure(text='Temperature (K)')
         self.label_temperature.grid(column='0', pady='5', row='20')
         self.entry_temperature = ttk.Entry(self.frame1)
+        self.entry_temperature.configure(validate='key')
         _text_ = '''298'''
         self.entry_temperature.delete('0', 'end')
         self.entry_temperature.insert('0', _text_)
@@ -171,6 +172,7 @@ class GUI:
         self.label_r.configure(text='Gas Constant (J/mol*K)')
         self.label_r.grid(column='0', pady='5', row='21')
         self.entry_gas_constant = ttk.Entry(self.frame1)
+        self.entry_gas_constant.configure(validate='key')
         _text_ = '''8.314'''
         self.entry_gas_constant.delete('0', 'end')
         self.entry_gas_constant.insert('0', _text_)
@@ -289,6 +291,17 @@ class GUI:
         self.frame2.configure(height='200', width='200')
         self.frame2.pack(side='top')
         self.toplevel2.configure(height='200', width='200')
+
+        vcmd = (self.frame1.register(self.onValidate), '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        self.entry_hole1.config(validatecommand=vcmd)
+        self.entry_hole2.config(validatecommand=vcmd)
+        self.entry_hole_width.config(validatecommand=vcmd)
+        self.entry_hole_length.config(validatecommand=vcmd)
+        self.entry_connecting_dim.config(validatecommand=vcmd)
+        self.entry_connecting_width.config(validatecommand=vcmd)
+        self.entry_connecting_length.config(validatecommand=vcmd)
+        self.entry_temperature.config(validatecommand=vcmd)
+        self.entry_gas_constant.config(validatecommand=vcmd)
 
         _, _, filenames = next(os.walk(os.path.join('Gas_Data')))
         gas_list = []
@@ -466,6 +479,14 @@ class GUI:
             self.tol_dict[i] = {'Q': qs, 'CV': cv, 'IMAGE': image}
         self.update_image(self.label_image, self.tol_dict[0]['IMAGE'])
         return current_dim
+
+    def onValidate(self, d, i, P, s, S, v, V, W):
+        try:
+            float(P)
+            return True
+        except ValueError:
+            self.frame1.bell()
+            return False
 
     def on_tab_select(self, event):
         if self.successful_run:
