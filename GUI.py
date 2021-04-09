@@ -563,7 +563,11 @@ class GUI:
             self.entry_connecting_width.grid(column=2, row=8)
 
     def on_main_close(self):
-        quit()
+        try:
+            quit()
+        except NameError:
+            self.toplevel2.quit()
+            self.toplevel1.quit()
 
     def on_sub_close(self):
         self.toplevel2.withdraw()
