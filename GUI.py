@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkinter import filedialog
 import GasNetworkSim
 import numpy as np
 import matplotlib.pyplot as plt
@@ -225,6 +226,7 @@ class GUI:
         self.button1 = ttk.Button(self.frame1)
         self.button1.configure(text='Run Once')
         self.button1.grid(column='2', columnspan='2', row='22')
+        self.button1.configure(command=self.run_once)
         self.combobox_units_temperature = ttk.Combobox(self.frame1)
         self.combobox_units_temperature.configure(state='readonly', values='(K) (C) (F)', width='8')
         self.combobox_units_temperature.grid(column='1', padx='5', row='20')
@@ -242,37 +244,37 @@ class GUI:
         self.scrollbar_x.grid(column='0', ipadx='180', row='1', sticky='n')
         self.text1 = tk.Text(self.frame2)
         self.text1.configure(height='20', state='disabled', width='75', wrap='none')
-        self.text1.grid(column='0', row='0')
+        self.text1.grid(column='0', columnspan='5', row='0')
         self.text1.rowconfigure('0', pad='0')
         self.label_image = ttk.Label(self.frame2)
         self.blank_png = tk.PhotoImage(file='blank.png')
         self.label_image.configure(image=self.blank_png)
-        self.label_image.grid(column='2', columnspan='5', row='0')
+        self.label_image.grid(column='5', columnspan='5', row='0')
         self.label_optimized = ttk.Label(self.frame2)
         self.label_optimized.configure(text='Optimized Dimensions (in.)')
         self.label_optimized.grid(column='0', row='4')
         self.entry_dim1 = ttk.Entry(self.frame2)
         self.entry_dim1.configure(state='readonly', width='8')
-        self.entry_dim1.grid(column='2', padx='2', row='4')
+        self.entry_dim1.grid(column='5', padx='2', row='4')
         self.entry_dim2 = ttk.Entry(self.frame2)
         self.entry_dim2.configure(state='readonly', width='8')
-        self.entry_dim2.grid(column='3', padx='2', row='4')
+        self.entry_dim2.grid(column='6', padx='2', row='4')
         self.entry_dim3 = ttk.Entry(self.frame2)
         self.entry_dim3.configure(state='readonly', width='8')
-        self.entry_dim3.grid(column='4', padx='2', row='4')
+        self.entry_dim3.grid(column='7', padx='2', row='4')
         self.entry_dim4 = ttk.Entry(self.frame2)
         self.entry_dim4.configure(state='readonly', width='8')
-        self.entry_dim4.grid(column='5', padx='2', row='4')
+        self.entry_dim4.grid(column='8', padx='2', row='4')
         self.entry_dim5 = ttk.Entry(self.frame2)
         self.entry_dim5.configure(state='readonly', width='8')
-        self.entry_dim5.grid(column='6', padx='2', row='4')
+        self.entry_dim5.grid(column='9', padx='2', row='4')
         self.separator4 = ttk.Separator(self.frame2)
         self.separator4.configure(orient='horizontal')
         self.separator4.grid(column='0', columnspan='5', ipadx='300', pady='5', row='5')
         self.notebook_tolerances = ttk.Notebook(self.frame2)
         self.frame_default = ttk.Frame(self.notebook_tolerances)
         self.label_defaultcv = ttk.Label(self.frame_default)
-        self.label_defaultcv.configure(text='Coefficient of Variation:')
+        self.label_defaultcv.configure(text='Standard deviation as a percentage of the mean: ')
         self.label_defaultcv.grid(column='0', row='0')
         self.entry_defaultcv = ttk.Entry(self.frame_default)
         self.entry_defaultcv.configure(state='readonly')
@@ -341,6 +343,10 @@ class GUI:
         self.notebook_tolerances.add(self.frame_large1, text='1st Opening 1 mil Large')
         self.notebook_tolerances.configure(height='350', width='450')
         self.notebook_tolerances.grid(column='0', columnspan='5', row='11')
+        self.button_export = ttk.Button(self.frame2)
+        self.button_export.configure(text='Export to JSON')
+        self.button_export.grid(column='0', pady='2', row='12', sticky='e')
+        self.button_export.configure(command=self.export_to_json)
         self.frame2.configure(height='200', width='200')
         self.frame2.pack(side='top')
         self.toplevel2.configure(height='200', width='200')
@@ -429,6 +435,7 @@ class GUI:
 
         self.notebook_tolerances.bind('<<NotebookTabChanged>>', self.on_tab_select)
         self.tol_dict = {}
+        self.export_dict = {}
 
         # Main widget
         self.mainwindow = self.toplevel1
@@ -440,6 +447,8 @@ class GUI:
             self.toplevel2.deiconify()
             self.currently_running = True
             self.successful_run = False
+            self.tol_dict.clear()
+            self.export_dict.clear()
             try:
                 # Grab data from main window
                 if self.combobox_hole_shape.get() == 'Circle':
@@ -476,7 +485,7 @@ class GUI:
                 tem = float(self.entry_temperature.get())
                 gas_r = float(self.entry_gas_constant.get())
 
-                # Convert units into mks
+                # Convert to proper units
                 for i in range(len(dim_o)):
                     dim_o[i] = self.convert(dim_o[i], self.combobox_units_holedim.get(), '(in.)')
                 width_o = self.convert(len_o, self.combobox_units_holewidth.get(), '(in.)')
@@ -487,6 +496,26 @@ class GUI:
                 thr = self.convert(thr, self.combobox_units_throughput.get(), '(SCCM)')
                 ch_p = self.convert(ch_p, self.combobox_units_pressure.get(), '(millitorr)')
                 tem = self.convert(tem, self.combobox_units_temperature.get(), '(K)')
+
+                # Prepare data for potential export
+                self.export_dict['Aperture Shape'] = shp_o
+                self.export_dict['Number of Openings'] = self.combobox_hole_count.get()
+                self.export_dict['Aperture Dimensions'] = dim_o
+                self.export_dict['Aperture Width'] = width_o
+                self.export_dict['Aperture Length'] = len_o
+                self.export_dict['Connecting Tube Shape'] = shp_c
+                self.export_dict['Connecting Tube Dimension'] = dim_c
+                self.export_dict['Connecting Tube Width'] = width_c
+                self.export_dict['Connecting Tube Length'] = len_c
+                self.export_dict['Throughput'] = thr
+                self.export_dict['Chamber Pressure'] = ch_p
+                self.export_dict['Gamma'] = gam
+                self.export_dict['Molar Mass'] = mol_m
+                self.export_dict['Particle Diameter'] = par_d
+                self.export_dict['Viscosity'] = vis
+                self.export_dict['Temperature'] = tem
+                self.export_dict['Gas Constant'] = gas_r
+
                 run = True
             except ValueError as error:
                 self.append_txt(str(error) + '\n')
@@ -506,11 +535,132 @@ class GUI:
                         self.update_text(self.entry_dim4, str(optimized_dim[3]))
                         self.update_text(self.entry_dim5, str(optimized_dim[4]))
                     self.append_txt('...Finished!\n')
+
+                    self.export_dict['Aperture Dimensions'] = optimized_dim
+
                     self.successful_run = True
                 except RuntimeError:
                     self.append_txt('Run failed\n')
                     self.successful_run = False
+                    self.export_dict.clear()
+                    self.tol_dict.clear()
                 self.currently_running = False
+
+    def run_once(self):
+        if self.currently_running:
+            pass
+        else:
+            self.toplevel2.deiconify()
+            self.currently_running = True
+            self.successful_run = False
+            self.tol_dict.clear()
+            self.export_dict.clear()
+            try:
+                # Grab data from main window
+                if self.combobox_hole_shape.get() == 'Circle':
+                    shp_o = 'circle'
+                elif self.combobox_hole_shape.get() == 'Rectangle':
+                    shp_o = 'rectangle'
+                else:
+                    raise ValueError("Aperture shape not selected")
+                dim_o = [float(self.entry_hole1.get()), float(self.entry_hole2.get()), float(self.entry_hole3.get())]
+                if self.combobox_hole_count.get() == '8':
+                    dim_o.append(float(self.entry_hole4.get()))
+                elif self.combobox_hole_count.get() == '10':
+                    dim_o.append(float(self.entry_hole4.get()))
+                    dim_o.append(float(self.entry_hole5.get()))
+                else:
+                    pass
+                len_o = float(self.entry_hole_length.get())
+                if self.combobox_connecting_shape.get() == 'Circle':
+                    shp_c = 'circle'
+                elif self.combobox_connecting_shape.get() == 'Rectangle':
+                    shp_c = 'rectangle'
+                else:
+                    raise ValueError("Connecting pipe shape not selected")
+                width_o = float(self.entry_hole_width.get())
+                width_c = float(self.entry_connecting_width.get())
+                dim_c = float(self.entry_connecting_dim.get())
+                len_c = float(self.entry_connecting_length.get())
+                thr = float(self.entry_throughput.get())
+                ch_p = float(self.entry_chamber_pressure.get())
+                gam = float(self.entry_gamma.get())
+                mol_m = float(self.entry_molar_mass.get())
+                par_d = float(self.entry_particle_diameter.get())
+                vis = float(self.entry_viscosity.get())
+                tem = float(self.entry_temperature.get())
+                gas_r = float(self.entry_gas_constant.get())
+
+                # Convert to proper units
+                for i in range(len(dim_o)):
+                    dim_o[i] = self.convert(dim_o[i], self.combobox_units_holedim.get(), '(in.)')
+                width_o = self.convert(len_o, self.combobox_units_holewidth.get(), '(in.)')
+                len_o = self.convert(len_o, self.combobox_units_holelength.get(), '(in.)')
+                dim_c = self.convert(dim_c, self.combobox_units_tubedim.get(), '(in.)')
+                width_c = self.convert(width_c, self.combobox_units_tubewidth.get(), '(in.)')
+                len_c = self.convert(len_c, self.combobox_units_tubelength.get(), '(in.)')
+                thr = self.convert(thr, self.combobox_units_throughput.get(), '(SCCM)')
+                ch_p = self.convert(ch_p, self.combobox_units_pressure.get(), '(millitorr)')
+                tem = self.convert(tem, self.combobox_units_temperature.get(), '(K)')
+
+                # Prepare data for potential export
+                self.export_dict['Aperture Shape'] = shp_o
+                self.export_dict['Number of Openings'] = self.combobox_hole_count.get()
+                self.export_dict['Aperture Dimensions'] = dim_o
+                self.export_dict['Aperture Width'] = width_o
+                self.export_dict['Aperture Length'] = len_o
+                self.export_dict['Connecting Tube Shape'] = shp_c
+                self.export_dict['Connecting Tube Dimension'] = dim_c
+                self.export_dict['Connecting Tube Width'] = width_c
+                self.export_dict['Connecting Tube Length'] = len_c
+                self.export_dict['Throughput'] = thr
+                self.export_dict['Chamber Pressure'] = ch_p
+                self.export_dict['Gamma'] = gam
+                self.export_dict['Molar Mass'] = mol_m
+                self.export_dict['Particle Diameter'] = par_d
+                self.export_dict['Viscosity'] = vis
+                self.export_dict['Temperature'] = tem
+                self.export_dict['Gas Constant'] = gas_r
+
+                run = True
+            except ValueError as error:
+                self.append_txt(str(error) + '\n')
+                run = False
+                self.currently_running = False
+            if run:
+                self.append_txt('Running once...\n')
+                q_tol = [None] * 5
+                try:
+                    q_tol[0] = GasNetworkSim.sim(shp_o, dim_o, width_o, len_o, shp_c, dim_c, width_c, len_c,
+                                                 thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
+                    q_tol[1] = GasNetworkSim.sim(shp_o, dim_o, width_o, len_o, shp_c, dim_c, width_c, len_c,
+                                                 thr * 2, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
+                    q_tol[2] = GasNetworkSim.sim(shp_o, dim_o, width_o, len_o, shp_c, dim_c, width_c, len_c,
+                                                 thr * 0.5, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
+                    small_dim = dim_o.copy()
+                    small_dim[0] -= 0.001
+                    large_dim = dim_o.copy()
+                    large_dim[0] += 0.001
+                    q_tol[3] = GasNetworkSim.sim(shp_o, small_dim, width_o, len_o, shp_c, dim_c, width_c, len_c,
+                                                 thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
+                    q_tol[4] = GasNetworkSim.sim(shp_o, large_dim, width_o, len_o, shp_c, dim_c, width_c, len_c,
+                                                 thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
+                except RuntimeError:
+                    self.append_txt('...Run Failed\n')
+                    self.currently_running = False
+                    self.successful_run = False
+                    self.export_dict.clear()
+                    self.tol_dict.clear()
+                self.append_txt('...Run Finished\n')
+                self.currently_running = False
+                self.successful_run = True
+                for i in range(len(q_tol)):
+                    qs = q_tol[i]
+                    cv = np.std(q_tol[i]) / np.mean(q_tol[i])
+                    image = self.generate_graph(q_tol[i], str(i))
+                    self.tol_dict[i] = {'Q': qs, 'CV': cv, 'IMAGE': image}
+                    self.export_dict['run_type' + str(i)] = {'Q': qs}
+                self.update_image(self.label_image, self.tol_dict[0]['IMAGE'])
 
     def optimize(self, shape_o, dim_o, width_o, length_o, shape_c, dim_c, width_c, length_c, throughput,
                  chamber_pressure, gamma, molar_mass, particle_diameter, viscosity, temp, r_0):
@@ -518,7 +668,6 @@ class GUI:
             shutil.rmtree(os.path.join('temp'))
         except FileNotFoundError:
             pass
-        self.tol_dict.clear()
         current_dim = dim_o
         depth = 0
         max_depth = len(current_dim)
@@ -592,8 +741,10 @@ class GUI:
                                      throughput * 0.5, chamber_pressure, gamma, molar_mass, particle_diameter,
                                      viscosity,
                                      temp, r_0)
-        small_dim = (current_dim[0] - 0.001, current_dim[1], current_dim[2])
-        large_dim = (current_dim[0] + 0.001, current_dim[1], current_dim[2])
+        small_dim = current_dim.copy()
+        small_dim[0] -= 0.001
+        large_dim = current_dim.copy()
+        large_dim[0] += 0.001
         q_tol[3] = GasNetworkSim.sim(shape_o, small_dim, width_o, length_o, shape_c, dim_c, width_c, length_c,
                                      throughput, chamber_pressure, gamma, molar_mass, particle_diameter, viscosity,
                                      temp, r_0)
@@ -605,6 +756,7 @@ class GUI:
             cv = np.std(q_tol[i]) / np.mean(q_tol[i])
             image = self.generate_graph(q_tol[i], str(i))
             self.tol_dict[i] = {'Q': qs, 'CV': cv, 'IMAGE': image}
+            self.export_dict['run_type' + str(i)] = {'Q': qs}
         self.update_image(self.label_image, self.tol_dict[0]['IMAGE'])
         return current_dim
 
@@ -637,7 +789,6 @@ class GUI:
                 entry.delete('0', 'end')
                 entry.insert('0', str(new_value))
                 entry.unit = next
-
 
     def on_hole_count_select(self, event):
         if self.combobox_hole_count.get() == '6':
@@ -773,6 +924,16 @@ class GUI:
         self.text1.update()
         self.text1.config(state='disabled')
         self.text1.yview(tk.END)
+
+    def export_to_json(self):
+        files = [('JSON Files', '*.json'),
+                 ('All Files', '*.*')]
+        file = filedialog.asksaveasfile(filetypes=files, defaultextension=files)
+        json_obj = json.dumps(self.export_dict, indent=4)
+        if file is None:
+            return
+        file.write(json_obj)
+        file.close()
 
     def convert(self, value, old_unit, new_unit):
         if old_unit == '(in.)':
