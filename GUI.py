@@ -15,172 +15,219 @@ class GUI:
         self.frame1 = ttk.Frame(self.toplevel1)
         self.label_hole_shape = ttk.Label(self.frame1)
         self.label_hole_shape.configure(text='Aperture Shape')
-        self.label_hole_shape.grid(column='0', pady='5', row='0')
+        self.label_hole_shape.grid(column='0', pady='5', row='0', sticky='e')
         self.combobox_hole_shape = ttk.Combobox(self.frame1)
         self.combobox_hole_shape.configure(state='readonly', values='Circle Rectangle')
         self.combobox_hole_shape.grid(column='1', columnspan='3', pady='5', row='0')
+        self.label_hole_count = ttk.Label(self.frame1)
+        self.label_hole_count.configure(text='Number of Openings')
+        self.label_hole_count.grid(column='0', row='1', sticky='e')
+        self.combobox_hole_count = ttk.Combobox(self.frame1)
+        self.combobox_hole_count.configure(state='readonly', values='6 8 10', width='5')
+        self.combobox_hole_count.grid(column='1', columnspan='3', row='1')
         self.label_hole_dim = ttk.Label(self.frame1)
-        self.label_hole_dim.configure(text='Aperture Dimensions (inches)')
-        self.label_hole_dim.grid(column='0', pady='5', row='1')
+        self.label_hole_dim.configure(text='Aperture Dimensions')
+        self.label_hole_dim.grid(column='0', pady='5', row='2', sticky='e')
         self.entry_hole1 = ttk.Entry(self.frame1)
         self.entry_hole1.configure(validate='key', width='5')
         _text_ = '''0.039'''
         self.entry_hole1.delete('0', 'end')
         self.entry_hole1.insert('0', _text_)
-        self.entry_hole1.grid(column='1', pady='5', row='1')
+        self.entry_hole1.grid(column='2', padx='2', pady='5', row='2')
         self.entry_hole2 = ttk.Entry(self.frame1)
         self.entry_hole2.configure(validate='key', width='5')
         _text_ = '''0.052'''
         self.entry_hole2.delete('0', 'end')
         self.entry_hole2.insert('0', _text_)
-        self.entry_hole2.grid(column='2', pady='5', row='1')
+        self.entry_hole2.grid(column='3', padx='2', pady='5', row='2')
         self.entry_hole3 = ttk.Entry(self.frame1)
         self.entry_hole3.configure(validate='key', width='5')
         _text_ = '''0.075'''
         self.entry_hole3.delete('0', 'end')
         self.entry_hole3.insert('0', _text_)
-        self.entry_hole3.grid(column='3', pady='5', row='1')
-        self.label_hole_length = ttk.Label(self.frame1)
-        self.label_hole_length.configure(text='Aperture Length (inches)')
-        self.label_hole_length.grid(column='0', pady='5', row='4')
-        self.entry_hole_length = ttk.Entry(self.frame1)
-        self.entry_hole_length.configure(validate='key', width='5')
-        _text_ = '''0.0625'''
-        self.entry_hole_length.delete('0', 'end')
-        self.entry_hole_length.insert('0', _text_)
-        self.entry_hole_length.grid(column='2', pady='5', row='4')
+        self.entry_hole3.grid(column='4', padx='2', pady='5', row='2')
+        self.entry_hole4 = ttk.Entry(self.frame1)
+        self.entry_hole4.configure(validate='key', width='5')
+        self.entry_hole4.grid(column='5', padx='2', pady='5', row='2')
+        self.entry_hole5 = ttk.Entry(self.frame1)
+        self.entry_hole5.configure(validate='key', width='5')
+        self.entry_hole5.grid(column='6', padx='2', pady='5', row='2')
+        self.combobox_units_holedim = ttk.Combobox(self.frame1)
+        self.combobox_units_holedim.configure(state='readonly', values='(in.) (mil) (m) (mm)', width='8')
+        self.combobox_units_holedim.grid(column='1', padx='5', row='2')
         self.label_hole_width = ttk.Label(self.frame1)
-        self.label_hole_width.configure(text='Aperture Width (inches)')
-        self.label_hole_width.grid(column='0', row='3')
+        self.label_hole_width.configure(text='Aperture Width')
+        self.label_hole_width.grid(column='0', row='3', sticky='e')
+        self.combobox_units_holewidth = ttk.Combobox(self.frame1)
+        self.combobox_units_holewidth.configure(state='readonly', values='(in.) (mil) (m) (mm)', width='8')
+        self.combobox_units_holewidth.grid(column='1', padx='5', row='3')
         self.entry_hole_width = ttk.Entry(self.frame1)
-        self.entry_hole_width.configure(validate='key', width='5')
+        self.entry_hole_width.configure(validate='key', width='10')
         _text_ = '''0'''
         self.entry_hole_width.delete('0', 'end')
         self.entry_hole_width.insert('0', _text_)
-        self.entry_hole_width.grid(column='2', row='3')
+        self.entry_hole_width.grid(column='2', columnspan='3', pady='5', row='3')
+        self.label_hole_length = ttk.Label(self.frame1)
+        self.label_hole_length.configure(text='Aperture Length')
+        self.label_hole_length.grid(column='0', pady='5', row='4', sticky='e')
+        self.combobox_units_holelength = ttk.Combobox(self.frame1)
+        self.combobox_units_holelength.configure(state='readonly', values='(in.) (mil) (m) (mm)', width='8')
+        self.combobox_units_holelength.grid(column='1', padx='5', row='4')
+        self.entry_hole_length = ttk.Entry(self.frame1)
+        self.entry_hole_length.configure(validate='key', width='10')
+        _text_ = '''0.0625'''
+        self.entry_hole_length.delete('0', 'end')
+        self.entry_hole_length.insert('0', _text_)
+        self.entry_hole_length.grid(column='2', columnspan='3', pady='5', row='4')
         self.separator0 = ttk.Separator(self.frame1)
         self.separator0.configure(orient='horizontal')
-        self.separator0.grid(column='0', columnspan='4', ipadx='100', pady='5', row='5')
+        self.separator0.grid(column='0', columnspan='5', ipadx='150', pady='5', row='5')
         self.label_connecting_shape = ttk.Label(self.frame1)
         self.label_connecting_shape.configure(text='Connecting Tube Shape')
-        self.label_connecting_shape.grid(column='0', pady='5', row='6')
+        self.label_connecting_shape.grid(column='0', pady='5', row='6', sticky='e')
         self.combobox_connecting_shape = ttk.Combobox(self.frame1)
         self.combobox_connecting_shape.configure(state='readonly', values='Circle Rectangle')
         self.combobox_connecting_shape.grid(column='1', columnspan='3', pady='5', row='6')
         self.label_connecting_dim = ttk.Label(self.frame1)
-        self.label_connecting_dim.configure(text='Connecting Tube Diameter (inches)')
-        self.label_connecting_dim.grid(column='0', pady='5', row='7')
+        self.label_connecting_dim.configure(text='Connecting Tube Diameter')
+        self.label_connecting_dim.grid(column='0', pady='5', row='7', sticky='e')
+        self.combobox_units_tubedim = ttk.Combobox(self.frame1)
+        self.combobox_units_tubedim.configure(state='readonly', values='(in.) (mil) (m) (mm)', width='8')
+        self.combobox_units_tubedim.grid(column='1', padx='5', row='7')
         self.entry_connecting_dim = ttk.Entry(self.frame1)
-        self.entry_connecting_dim.configure(validate='key', width='5')
+        self.entry_connecting_dim.configure(validate='key', width='10')
         _text_ = '''0.125'''
         self.entry_connecting_dim.delete('0', 'end')
         self.entry_connecting_dim.insert('0', _text_)
-        self.entry_connecting_dim.grid(column='2', pady='5', row='7')
+        self.entry_connecting_dim.grid(column='2', columnspan='3', pady='5', row='7')
         self.label_connecting_width = ttk.Label(self.frame1)
-        self.label_connecting_width.configure(text='Connecting Tube Width (inches)')
-        self.label_connecting_width.grid(column='0', row='8')
+        self.label_connecting_width.configure(text='Connecting Tube Width')
+        self.label_connecting_width.grid(column='0', row='8', sticky='e')
+        self.combobox_units_tubewidth = ttk.Combobox(self.frame1)
+        self.combobox_units_tubewidth.configure(state='readonly', values='(in.) (mil) (m) (mm)', width='8')
+        self.combobox_units_tubewidth.grid(column='1', padx='5', row='8')
         self.entry_connecting_width = ttk.Entry(self.frame1)
-        self.entry_connecting_width.configure(validate='key', width='4')
+        self.entry_connecting_width.configure(validate='key', width='10')
         _text_ = '''0'''
         self.entry_connecting_width.delete('0', 'end')
         self.entry_connecting_width.insert('0', _text_)
-        self.entry_connecting_width.grid(column='2', row='8')
+        self.entry_connecting_width.grid(column='2', columnspan='3', pady='5', row='8')
         self.label_connecting_length = ttk.Label(self.frame1)
-        self.label_connecting_length.configure(text='Connecting Tube Length (inches)')
-        self.label_connecting_length.grid(column='0', pady='5', row='9')
+        self.label_connecting_length.configure(text='Connecting Tube Length')
+        self.label_connecting_length.grid(column='0', pady='5', row='9', sticky='e')
+        self.combobox_units_tubelength = ttk.Combobox(self.frame1)
+        self.combobox_units_tubelength.configure(state='readonly', values='(in.) (mil) (m) (mm)', width='8')
+        self.combobox_units_tubelength.grid(column='1', padx='5', row='9')
         self.entry_connecting_length = ttk.Entry(self.frame1)
-        self.entry_connecting_length.configure(validate='key', width='5')
+        self.entry_connecting_length.configure(validate='key', width='10')
         _text_ = '''1.31'''
         self.entry_connecting_length.delete('0', 'end')
         self.entry_connecting_length.insert('0', _text_)
-        self.entry_connecting_length.grid(column='2', pady='5', row='9')
+        self.entry_connecting_length.grid(column='2', columnspan='3', pady='5', row='9')
         self.separator1 = ttk.Separator(self.frame1)
         self.separator1.configure(orient='horizontal')
-        self.separator1.grid(column='0', columnspan='4', ipadx='100', pady='5', row='10')
+        self.separator1.grid(column='0', columnspan='5', ipadx='150', pady='5', row='10')
         self.label_throughput = ttk.Label(self.frame1)
-        self.label_throughput.configure(text='Throughput (SCCM)')
-        self.label_throughput.grid(column='0', pady='5', row='11')
+        self.label_throughput.configure(text='Throughput')
+        self.label_throughput.grid(column='0', pady='5', row='11', sticky='e')
+        self.combobox_units_throughput = ttk.Combobox(self.frame1)
+        self.combobox_units_throughput.configure(state='readonly', values='(SCCM) (Pa*m^3/s)', width='8')
+        self.combobox_units_throughput.grid(column='1', padx='5', row='11')
         self.entry_throughput = ttk.Entry(self.frame1)
-        self.entry_throughput.configure(validate='key', width='5')
+        self.entry_throughput.configure(validate='key', width='10')
         _text_ = '''10'''
         self.entry_throughput.delete('0', 'end')
         self.entry_throughput.insert('0', _text_)
-        self.entry_throughput.grid(column='2', pady='5', row='11')
+        self.entry_throughput.grid(column='2', columnspan='3', pady='5', row='11')
         self.label_chamber_pressure = ttk.Label(self.frame1)
-        self.label_chamber_pressure.configure(text='Chamber Pressure (millitorr)')
-        self.label_chamber_pressure.grid(column='0', pady='5', row='12')
+        self.label_chamber_pressure.configure(text='Chamber Pressure')
+        self.label_chamber_pressure.grid(column='0', pady='5', row='12', sticky='e')
+        self.combobox_units_pressure = ttk.Combobox(self.frame1)
+        self.combobox_units_pressure.configure(state='readonly', values='(millitorr) (torr) (atm) (bar) (Pa)',
+                                               width='8')
+        self.combobox_units_pressure.grid(column='1', padx='5', row='12')
         self.entry_chamber_pressure = ttk.Entry(self.frame1)
-        self.entry_chamber_pressure.configure(validate='key', width='5')
+        self.entry_chamber_pressure.configure(validate='key', width='10')
         _text_ = '''50'''
         self.entry_chamber_pressure.delete('0', 'end')
         self.entry_chamber_pressure.insert('0', _text_)
-        self.entry_chamber_pressure.grid(column='2', pady='5', row='12')
+        self.entry_chamber_pressure.grid(column='2', columnspan='3', pady='5', row='12')
         self.separator2 = ttk.Separator(self.frame1)
         self.separator2.configure(orient='horizontal')
-        self.separator2.grid(column='0', columnspan='4', ipadx='100', padx='5', row='13')
+        self.separator2.grid(column='0', columnspan='5', ipadx='150', padx='5', row='13')
         self.label_gas = ttk.Label(self.frame1)
         self.label_gas.configure(text='Gas')
-        self.label_gas.grid(column='0', pady='5', row='14')
+        self.label_gas.grid(column='0', pady='5', row='14', sticky='e')
         self.combobox_gas = ttk.Combobox(self.frame1)
         self.combobox_gas.configure(state='readonly', values='He N2 O2 Ar')
         self.combobox_gas.grid(column='1', columnspan='3', pady='5', row='14')
         self.label_gamma = ttk.Label(self.frame1)
         self.label_gamma.configure(text='Gamma')
-        self.label_gamma.grid(column='0', pady='5', row='15')
+        self.label_gamma.grid(column='0', pady='5', row='15', sticky='e')
         self.entry_gamma = ttk.Entry(self.frame1)
+        self.entry_gamma.configure(validate='key')
         _text_ = '''1.608'''
         self.entry_gamma.delete('0', 'end')
         self.entry_gamma.insert('0', _text_)
         self.entry_gamma.grid(column='1', columnspan='3', pady='5', row='15')
         self.label_molar_mass = ttk.Label(self.frame1)
         self.label_molar_mass.configure(text='Molar Mass (Kg/mol)')
-        self.label_molar_mass.grid(column='0', pady='5', row='16')
+        self.label_molar_mass.grid(column='0', pady='5', row='16', sticky='e')
         self.entry_molar_mass = ttk.Entry(self.frame1)
+        self.entry_molar_mass.configure(validate='key')
         _text_ = '''0.03756'''
         self.entry_molar_mass.delete('0', 'end')
         self.entry_molar_mass.insert('0', _text_)
         self.entry_molar_mass.grid(column='1', columnspan='3', padx='5', row='16')
         self.label_particle_diameter = ttk.Label(self.frame1)
         self.label_particle_diameter.configure(text='Particle Diameter (m)')
-        self.label_particle_diameter.grid(column='0', pady='5', row='17')
+        self.label_particle_diameter.grid(column='0', pady='5', row='17', sticky='e')
         self.entry_particle_diameter = ttk.Entry(self.frame1)
+        self.entry_particle_diameter.configure(validate='key')
         _text_ = '''0.0000000003448'''
         self.entry_particle_diameter.delete('0', 'end')
         self.entry_particle_diameter.insert('0', _text_)
         self.entry_particle_diameter.grid(column='1', columnspan='3', pady='5', row='17')
         self.label_viscosity = ttk.Label(self.frame1)
         self.label_viscosity.configure(text='Viscosity (Pa*s)')
-        self.label_viscosity.grid(column='0', pady='5', row='18')
+        self.label_viscosity.grid(column='0', pady='5', row='18', sticky='e')
         self.entry_viscosity = ttk.Entry(self.frame1)
+        self.entry_viscosity.configure(validate='key')
         _text_ = '''0.00002136'''
         self.entry_viscosity.delete('0', 'end')
         self.entry_viscosity.insert('0', _text_)
         self.entry_viscosity.grid(column='1', columnspan='3', pady='5', row='18')
         self.separator3 = ttk.Separator(self.frame1)
         self.separator3.configure(orient='horizontal')
-        self.separator3.grid(column='0', columnspan='4', ipadx='100', pady='5', row='19')
+        self.separator3.grid(column='0', columnspan='5', ipadx='150', pady='5', row='19')
         self.label_temperature = ttk.Label(self.frame1)
-        self.label_temperature.configure(text='Temperature (K)')
-        self.label_temperature.grid(column='0', pady='5', row='20')
+        self.label_temperature.configure(text='Temperature')
+        self.label_temperature.grid(column='0', pady='5', row='20', sticky='e')
         self.entry_temperature = ttk.Entry(self.frame1)
-        self.entry_temperature.configure(validate='key')
+        self.entry_temperature.configure(validate='key', width='10')
         _text_ = '''298'''
         self.entry_temperature.delete('0', 'end')
         self.entry_temperature.insert('0', _text_)
-        self.entry_temperature.grid(column='2', pady='5', row='20')
+        self.entry_temperature.grid(column='2', columnspan='3', pady='5', row='20')
         self.label_r = ttk.Label(self.frame1)
         self.label_r.configure(text='Gas Constant (J/mol*K)')
-        self.label_r.grid(column='0', pady='5', row='21')
+        self.label_r.grid(column='0', pady='5', row='21', sticky='e')
         self.entry_gas_constant = ttk.Entry(self.frame1)
         self.entry_gas_constant.configure(validate='key')
         _text_ = '''8.314'''
         self.entry_gas_constant.delete('0', 'end')
         self.entry_gas_constant.insert('0', _text_)
-        self.entry_gas_constant.grid(column='2', pady='5', row='21')
+        self.entry_gas_constant.grid(column='1', columnspan='3', pady='5', row='21')
         self.button_simulate = ttk.Button(self.frame1)
-        self.button_simulate.configure(text='Run Simulation')
+        self.button_simulate.configure(text='Optimize Dimensions')
         self.button_simulate.grid(column='0', columnspan='4', pady='5', row='22')
         self.button_simulate.configure(command=self.run_simulate)
+        self.button1 = ttk.Button(self.frame1)
+        self.button1.configure(text='Run Once')
+        self.button1.grid(column='2', columnspan='2', row='22')
+        self.combobox_units_temperature = ttk.Combobox(self.frame1)
+        self.combobox_units_temperature.configure(state='readonly', values='(K) (C) (F)', width='8')
+        self.combobox_units_temperature.grid(column='1', padx='5', row='20')
         self.frame1.configure(width='200')
         self.frame1.pack(side='top')
         self.toplevel1.configure(height='200', width='200')
@@ -200,19 +247,25 @@ class GUI:
         self.label_image = ttk.Label(self.frame2)
         self.blank_png = tk.PhotoImage(file='blank.png')
         self.label_image.configure(image=self.blank_png)
-        self.label_image.grid(column='2', columnspan='2', row='0')
+        self.label_image.grid(column='2', columnspan='5', row='0')
         self.label_optimized = ttk.Label(self.frame2)
-        self.label_optimized.configure(text='Optimized Dimensions')
+        self.label_optimized.configure(text='Optimized Dimensions (in.)')
         self.label_optimized.grid(column='0', row='4')
         self.entry_dim1 = ttk.Entry(self.frame2)
-        self.entry_dim1.configure(state='readonly')
-        self.entry_dim1.grid(column='2', row='4')
+        self.entry_dim1.configure(state='readonly', width='8')
+        self.entry_dim1.grid(column='2', padx='2', row='4')
         self.entry_dim2 = ttk.Entry(self.frame2)
-        self.entry_dim2.configure(state='readonly')
-        self.entry_dim2.grid(column='3', row='4')
+        self.entry_dim2.configure(state='readonly', width='8')
+        self.entry_dim2.grid(column='3', padx='2', row='4')
         self.entry_dim3 = ttk.Entry(self.frame2)
-        self.entry_dim3.configure(state='readonly')
-        self.entry_dim3.grid(column='4', row='4')
+        self.entry_dim3.configure(state='readonly', width='8')
+        self.entry_dim3.grid(column='4', padx='2', row='4')
+        self.entry_dim4 = ttk.Entry(self.frame2)
+        self.entry_dim4.configure(state='readonly', width='8')
+        self.entry_dim4.grid(column='5', padx='2', row='4')
+        self.entry_dim5 = ttk.Entry(self.frame2)
+        self.entry_dim5.configure(state='readonly', width='8')
+        self.entry_dim5.grid(column='6', padx='2', row='4')
         self.separator4 = ttk.Separator(self.frame2)
         self.separator4.configure(orient='horizontal')
         self.separator4.grid(column='0', columnspan='5', ipadx='300', pady='5', row='5')
@@ -295,11 +348,20 @@ class GUI:
         vcmd = (self.frame1.register(self.on_validate), '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
         self.entry_hole1.config(validatecommand=vcmd)
         self.entry_hole2.config(validatecommand=vcmd)
+        self.entry_hole3.config(validatecommand=vcmd)
+        self.entry_hole4.config(validatecommand=vcmd)
+        self.entry_hole5.config(validatecommand=vcmd)
         self.entry_hole_width.config(validatecommand=vcmd)
         self.entry_hole_length.config(validatecommand=vcmd)
         self.entry_connecting_dim.config(validatecommand=vcmd)
         self.entry_connecting_width.config(validatecommand=vcmd)
         self.entry_connecting_length.config(validatecommand=vcmd)
+        self.entry_throughput.config(validatecommand=vcmd)
+        self.entry_chamber_pressure.config(validatecommand=vcmd)
+        self.entry_gamma.config(validatecommand=vcmd)
+        self.entry_molar_mass.config(validatecommand=vcmd)
+        self.entry_particle_diameter.config(validatecommand=vcmd)
+        self.entry_viscosity.config(validatecommand=vcmd)
         self.entry_temperature.config(validatecommand=vcmd)
         self.entry_gas_constant.config(validatecommand=vcmd)
 
@@ -314,15 +376,54 @@ class GUI:
         self.text1.configure(xscrollcommand=self.scrollbar_x.set)
         self.text1.configure(yscrollcommand=self.scrollbar_y.set)
         self.combobox_hole_shape.bind('<<ComboboxSelected>>', self.on_hole_shape_select)
+        self.combobox_hole_count.bind('<<ComboboxSelected>>', self.on_hole_count_select)
         self.combobox_connecting_shape.bind('<<ComboboxSelected>>', self.on_connecting_shape_select)
+        self.entry_hole4.grid_forget()
+        self.entry_hole5.grid_forget()
         self.label_hole_width.grid_forget()
         self.entry_hole_width.grid_forget()
+        self.combobox_units_holewidth.grid_forget()
         self.label_connecting_width.grid_forget()
         self.entry_connecting_width.grid_forget()
+        self.combobox_units_tubewidth.grid_forget()
         self.toplevel2.withdraw()
         self.toplevel2.protocol("WM_DELETE_WINDOW", self.on_sub_close)
         self.toplevel1.protocol("WM_DELETE_WINDOW", self.on_main_close)
         self.my_image = tk.PhotoImage()
+        self.combobox_hole_shape.current('0')
+        self.combobox_hole_count.current('0')
+        self.combobox_units_holedim.current('0')
+        self.entry_hole1.unit = '(in.)'
+        self.entry_hole2.unit = '(in.)'
+        self.entry_hole3.unit = '(in.)'
+        self.entry_hole4.unit = '(in.)'
+        self.entry_hole5.unit = '(in.)'
+        self.combobox_units_holedim.bind('<<ComboboxSelected>>', self.on_unit_select)
+        self.combobox_units_holewidth.current('0')
+        self.entry_hole_width.unit = '(in.)'
+        self.combobox_units_holewidth.bind('<<ComboboxSelected>>', self.on_unit_select)
+        self.combobox_units_holelength.current('0')
+        self.entry_hole_length.unit = '(in.)'
+        self.combobox_units_holelength.bind('<<ComboboxSelected>>', self.on_unit_select)
+        self.combobox_connecting_shape.current('0')
+        self.combobox_units_tubedim.current('0')
+        self.entry_connecting_dim.unit = '(in.)'
+        self.combobox_units_tubedim.bind('<<ComboboxSelected>>', self.on_unit_select)
+        self.combobox_units_tubewidth.current('0')
+        self.entry_connecting_width.unit = '(in.)'
+        self.combobox_units_tubewidth.bind('<<ComboboxSelected>>', self.on_unit_select)
+        self.combobox_units_tubelength.current('0')
+        self.entry_connecting_length.unit = '(in.)'
+        self.combobox_units_tubelength.bind('<<ComboboxSelected>>', self.on_unit_select)
+        self.combobox_units_throughput.current('0')
+        self.entry_throughput.unit = '(SCCM)'
+        self.combobox_units_throughput.bind('<<ComboboxSelected>>', self.on_unit_select)
+        self.combobox_units_pressure.current('0')
+        self.entry_chamber_pressure.unit = '(millitorr)'
+        self.combobox_units_pressure.bind('<<ComboboxSelected>>', self.on_unit_select)
+        self.combobox_units_temperature.current('0')
+        self.entry_temperature.unit = '(K)'
+        self.combobox_units_temperature.bind('<<ComboboxSelected>>', self.on_unit_select)
         self.currently_running = False
         self.successful_run = False
 
@@ -337,11 +438,10 @@ class GUI:
             pass
         else:
             self.toplevel2.deiconify()
-            # Parse data from the main window
-            # Check if each is a valid entry
             self.currently_running = True
             self.successful_run = False
             try:
+                # Grab data from main window
                 if self.combobox_hole_shape.get() == 'Circle':
                     shp_o = 'circle'
                 elif self.combobox_hole_shape.get() == 'Rectangle':
@@ -349,6 +449,13 @@ class GUI:
                 else:
                     raise ValueError("Aperture shape not selected")
                 dim_o = [float(self.entry_hole1.get()), float(self.entry_hole2.get()), float(self.entry_hole3.get())]
+                if self.combobox_hole_count.get() == '8':
+                    dim_o.append(float(self.entry_hole4.get()))
+                elif self.combobox_hole_count.get() == '10':
+                    dim_o.append(float(self.entry_hole4.get()))
+                    dim_o.append(float(self.entry_hole5.get()))
+                else:
+                    pass
                 len_o = float(self.entry_hole_length.get())
                 if self.combobox_connecting_shape.get() == 'Circle':
                     shp_c = 'circle'
@@ -368,6 +475,18 @@ class GUI:
                 vis = float(self.entry_viscosity.get())
                 tem = float(self.entry_temperature.get())
                 gas_r = float(self.entry_gas_constant.get())
+
+                # Convert units into mks
+                for i in range(len(dim_o)):
+                    dim_o[i] = self.convert(dim_o[i], self.combobox_units_holedim.get(), '(in.)')
+                width_o = self.convert(len_o, self.combobox_units_holewidth.get(), '(in.)')
+                len_o = self.convert(len_o, self.combobox_units_holelength.get(), '(in.)')
+                dim_c = self.convert(dim_c, self.combobox_units_tubedim.get(), '(in.)')
+                width_c = self.convert(width_c, self.combobox_units_tubewidth.get(), '(in.)')
+                len_c = self.convert(len_c, self.combobox_units_tubelength.get(), '(in.)')
+                thr = self.convert(thr, self.combobox_units_throughput.get(), '(SCCM)')
+                ch_p = self.convert(ch_p, self.combobox_units_pressure.get(), '(millitorr)')
+                tem = self.convert(tem, self.combobox_units_temperature.get(), '(K)')
                 run = True
             except ValueError as error:
                 self.append_txt(str(error) + '\n')
@@ -381,6 +500,11 @@ class GUI:
                     self.update_text(self.entry_dim1, str(optimized_dim[0]))
                     self.update_text(self.entry_dim2, str(optimized_dim[1]))
                     self.update_text(self.entry_dim3, str(optimized_dim[2]))
+                    if len(dim_o) == 4:
+                        self.update_text(self.entry_dim4, str(optimized_dim[3]))
+                    if len(dim_o) == 5:
+                        self.update_text(self.entry_dim4, str(optimized_dim[3]))
+                        self.update_text(self.entry_dim5, str(optimized_dim[4]))
                     self.append_txt('...Finished!\n')
                     self.successful_run = True
                 except RuntimeError:
@@ -494,6 +618,41 @@ class GUI:
             self.frame1.bell()
             return False
 
+    def on_unit_select(self, event):
+        to_edit = []
+        for widget in self.frame1.winfo_children():
+            try:
+                if widget.grid_info()['row'] == event.widget.grid_info()['row']:
+                    if str(type(widget)) == str(type(self.entry_hole1)):
+                        to_edit.append(widget)
+            except KeyError:
+                pass
+        for entry in to_edit:
+            previous = entry.unit
+            next = event.widget.get()
+            if entry.get() == '':
+                pass
+            else:
+                new_value = self.convert(float(entry.get()), previous, next)
+                entry.delete('0', 'end')
+                entry.insert('0', str(new_value))
+                entry.unit = next
+
+
+    def on_hole_count_select(self, event):
+        if self.combobox_hole_count.get() == '6':
+            self.entry_hole4.grid_forget()
+            self.entry_hole5.grid_forget()
+            self.entry_hole4.delete('0', 'end')
+            self.entry_hole5.delete('0', 'end')
+        elif self.combobox_hole_count.get() == '8':
+            self.entry_hole5.grid_forget()
+            self.entry_hole5.delete('0', 'end')
+            self.entry_hole4.grid(column='5', row='2', padx='2')
+        else:
+            self.entry_hole4.grid(column='5', row='2', padx='2')
+            self.entry_hole5.grid(column='6', row='2', padx='2')
+
     def on_tab_select(self, event):
         if self.successful_run:
             selected = self.notebook_tolerances.index(self.notebook_tolerances.select())
@@ -517,7 +676,7 @@ class GUI:
                 pass
 
     def generate_graph(self, q, name):
-        x = [1, 2, 3]
+        x = range(1, len(q) + 1)
         y = [a / 101325 * (60 * 10 ** 6) for a in q]
         mean = np.mean(y)
         px = 1/plt.rcParams['figure.dpi']
@@ -526,7 +685,7 @@ class GUI:
         plt.ylabel('Throughput (SCCM)')
         plt.ylim(mean * 0.75, mean * 1.25)
         plt.plot(x, y)
-        plt.plot(x, [mean] * 3)
+        plt.plot(x, [mean] * len(q))
         for i in range(len(y)):
             plt.text(i + 1, y[i] + mean * 0.02, str(round(y[i], 2)), horizontalalignment='center')
         plt.tight_layout()
@@ -541,26 +700,34 @@ class GUI:
     def on_hole_shape_select(self, eventObject):
         if self.combobox_hole_shape.get() == 'Circle':
             self.label_hole_dim.config(text='Aperture Diameters')
-            self.entry_hole_width.grid_forget()
             self.label_hole_width.grid_forget()
+            self.combobox_units_holewidth.grid_forget()
+            self.entry_hole_width.grid_forget()
             self.entry_hole_width.insert('0', '0')
             self.entry_hole_width.delete('1', 'end')
         else:
             self.label_hole_dim.config(text='Aperture Height')
-            self.label_hole_width.grid(column=0, row=3)
-            self.entry_hole_width.grid(column=2, row=3)
+            self.label_hole_width.grid(column=0, row=3, sticky='e')
+            self.combobox_units_holewidth.grid(column=1, row=3)
+            self.combobox_units_holewidth.current('0')
+            self.entry_hole_width.grid(column=2, row=3, columnspan=3)
+            self.entry_hole_width.unit = '(in.)'
 
     def on_connecting_shape_select(self, eventObject):
         if self.combobox_connecting_shape.get() == 'Circle':
             self.label_connecting_dim.config(text='Connecting Tube Diameter')
-            self.entry_connecting_width.grid_forget()
             self.label_connecting_width.grid_forget()
+            self.combobox_units_tubewidth.grid_forget()
+            self.entry_connecting_width.grid_forget()
             self.entry_connecting_width.insert('0', '0')
             self.entry_connecting_width.delete('1', 'end')
         else:
             self.label_connecting_dim.config(text='Connecting Tube Height')
-            self.label_connecting_width.grid(column=0, row=8)
-            self.entry_connecting_width.grid(column=2, row=8)
+            self.label_connecting_width.grid(column=0, row=8, sticky='e')
+            self.combobox_units_tubewidth.grid(column=1, row=8)
+            self.combobox_units_tubewidth.current('0')
+            self.entry_connecting_width.grid(column=2, row=8, columnspan=3)
+            self.entry_connecting_width.unit = '(in)'
 
     def on_main_close(self):
         try:
@@ -606,6 +773,66 @@ class GUI:
         self.text1.update()
         self.text1.config(state='disabled')
         self.text1.yview(tk.END)
+
+    def convert(self, value, old_unit, new_unit):
+        if old_unit == '(in.)':
+            value *= 0.0254
+        elif old_unit == '(mil)':
+            value *= 0.0000254
+        elif old_unit == '(m)':
+            pass
+        elif old_unit == '(mm)':
+            value *= 0.001
+        elif old_unit == '(SCCM)':
+            value *= 101325 / (60 * 10 ** 6)
+        elif old_unit == '(Pa*m^3/s)':
+            pass
+        elif old_unit == '(millitorr)':
+            value *= 0.133322
+        elif old_unit == '(torr)':
+            value *= 133.322
+        elif old_unit == '(atm)':
+            value *= 101325
+        elif old_unit == '(bar)':
+            value *= 100000
+        elif old_unit == '(Pa)':
+            pass
+        elif old_unit == '(K)':
+            pass
+        elif old_unit == '(C)':
+            value += 273.15
+        elif old_unit == '(F)':
+            value = ((value - 32) * 5/9) + 273.15
+
+        if new_unit == '(in.)':
+            value /= 0.0254
+        elif new_unit == '(mil)':
+            value /= 0.0000254
+        elif new_unit == '(m)':
+            pass
+        elif new_unit == '(mm)':
+            value /= 0.001
+        elif new_unit == '(SCCM)':
+            value /= (101325 / (60 * 10 ** 6))
+        elif new_unit == '(Pa*m^3/s)':
+            pass
+        elif new_unit == '(millitorr)':
+            value /= 0.133322
+        elif new_unit == '(torr)':
+            value /= 133.322
+        elif new_unit == '(atm)':
+            value /= 101325
+        elif new_unit == '(bar)':
+            value /= 100000
+        elif new_unit == '(Pa)':
+            pass
+        elif new_unit == '(K)':
+            pass
+        elif new_unit == '(C)':
+            value -= 273.15
+        elif new_unit == '(F)':
+            value = ((value - 273.15) * 9/5) + 32
+        return round(value, 8)
 
     def run(self):
         self.mainwindow.mainloop()
