@@ -219,14 +219,18 @@ class GUI:
         self.entry_gas_constant.delete('0', 'end')
         self.entry_gas_constant.insert('0', _text_)
         self.entry_gas_constant.grid(column='1', columnspan='3', pady='5', row='21')
+        self.button_import = ttk.Button(self.frame1)
+        self.button_import.configure(text='Import From JSON')
+        self.button_import.grid(column='0', columnspan='4', row='22')
+        self.button_import.configure(command=self.import_from_json)
         self.button_simulate = ttk.Button(self.frame1)
         self.button_simulate.configure(text='Optimize Dimensions')
-        self.button_simulate.grid(column='0', columnspan='4', pady='5', row='22')
+        self.button_simulate.grid(column='0', columnspan='4', pady='5', row='23')
         self.button_simulate.configure(command=self.run_simulate)
-        self.button1 = ttk.Button(self.frame1)
-        self.button1.configure(text='Run Once')
-        self.button1.grid(column='2', columnspan='2', row='22')
-        self.button1.configure(command=self.run_once)
+        self.button_run_once = ttk.Button(self.frame1)
+        self.button_run_once.configure(text='Run Once')
+        self.button_run_once.grid(column='2', columnspan='2', row='23')
+        self.button_run_once.configure(command=self.run_once)
         self.combobox_units_temperature = ttk.Combobox(self.frame1)
         self.combobox_units_temperature.configure(state='readonly', values='(K) (C) (F)', width='8')
         self.combobox_units_temperature.grid(column='1', padx='5', row='20')
@@ -539,7 +543,7 @@ class GUI:
                     self.export_dict['Aperture Dimensions'] = optimized_dim
 
                     self.successful_run = True
-                except RuntimeError:
+                except (ValueError, RuntimeError):
                     self.append_txt('Run failed\n')
                     self.successful_run = False
                     self.export_dict.clear()
@@ -645,7 +649,7 @@ class GUI:
                                                  thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
                     q_tol[4] = GasNetworkSim.sim(shp_o, large_dim, width_o, len_o, shp_c, dim_c, width_c, len_c,
                                                  thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
-                except RuntimeError:
+                except RuntimeError or ValueError:
                     self.append_txt('...Run Failed\n')
                     self.currently_running = False
                     self.successful_run = False
@@ -924,6 +928,99 @@ class GUI:
         self.text1.update()
         self.text1.config(state='disabled')
         self.text1.yview(tk.END)
+
+    def import_from_json(self):
+        files = [('JSON Files', '*.json'),
+                 ('All Files', '*.*')]
+        file = filedialog.askopenfile(filetypes=files, defaultextension=files)
+        if file is None:
+            return
+        try:
+            json_dict = json.loads(file.read())
+        except ValueError:
+            self.frame1.bell()
+            return
+        if 'Aperture Shape' in json_dict:
+            if json_dict['Aperture Shape'] == 'circle':
+                self.combobox_hole_shape.set('Circle')
+            else:
+                self.combobox_hole_shape.set('Rectangle')
+            self.on_hole_shape_select(None)
+        if 'Number of Openings' in json_dict:
+            self.combobox_hole_count.set(json_dict['Number of Openings'])
+            self.on_hole_count_select(None)
+        if 'Aperture Dimensions' in json_dict:
+            self.combobox_units_holedim.set('(in.)')
+            self.entry_hole1.delete('0', 'end')
+            self.entry_hole2.delete('0', 'end')
+            self.entry_hole3.delete('0', 'end')
+            self.entry_hole1.insert('0', json_dict['Aperture Dimensions'][0])
+            self.entry_hole2.insert('0', json_dict['Aperture Dimensions'][1])
+            self.entry_hole3.insert('0', json_dict['Aperture Dimensions'][2])
+            try:
+                if self.combobox_hole_count.get() == '8':
+                    self.entry_hole4.delete('0', 'end')
+                    self.entry_hole4.insert('0', json_dict['Aperture Dimensions'][3])
+                if self.combobox_hole_count.get() == '10':
+                    self.entry_hole4.delete('0', 'end')
+                    self.entry_hole4.insert('0', json_dict['Aperture Dimensions'][4])
+                    self.entry_hole5.delete('0', 'end')
+                    self.entry_hole5.insert('0', json_dict['Aperture Dimensions'][4])
+            except IndexError:
+                pass
+        if 'Aperture Width' in json_dict:
+            self.entry_hole_width.delete('0', 'end')
+            self.entry_hole_width.insert('0', json_dict['Aperture Width'])
+            self.combobox_units_holewidth.set('(in.)')
+        if 'Aperture Length' in json_dict:
+            self.entry_hole_length.delete('0', 'end')
+            self.entry_hole_length.insert('0', json_dict['Aperture Length'])
+            self.combobox_units_holelength.set('(in.)')
+        if 'Connecting Tube Shape' in json_dict:
+            if json_dict['Connecting Tube Shape'] == 'circle':
+                self.combobox_connecting_shape.set('Circle')
+            else:
+                self.combobox_connecting_shape.set('Rectangle')
+            self.on_connecting_shape_select(None)
+        if 'Connecting Tube Dimension' in json_dict:
+            self.entry_connecting_dim.delete('0', 'end')
+            self.entry_connecting_dim.insert('0', json_dict['Connecting Tube Dimension'])
+            self.combobox_units_tubedim.set('(in.)')
+        if 'Connecting Tube Width' in json_dict:
+            self.entry_connecting_width.delete('0', 'end')
+            self.entry_connecting_width.insert('0', json_dict['Connecting Tube Width'])
+            self.combobox_units_tubewidth.set('(in.)')
+        if 'Connecting Tube Length' in json_dict:
+            self.entry_connecting_length.delete('0', 'end')
+            self.entry_connecting_length.insert('0', json_dict['Connecting Tube Length'])
+            self.combobox_units_tubelength.set('(in.)')
+        if 'Throughput' in json_dict:
+            self.entry_throughput.delete('0', 'end')
+            self.entry_throughput.insert('0', json_dict['Throughput'])
+            self.combobox_units_throughput.set('(SCCM)')
+        if 'Chamber Pressure' in json_dict:
+            self.entry_chamber_pressure.delete('0', 'end')
+            self.entry_chamber_pressure.insert('0', json_dict['Chamber Pressure'])
+            self.combobox_units_pressure.set('(millitorr)')
+        if 'Gamma' in json_dict:
+            self.entry_gamma.delete('0', 'end')
+            self.entry_gamma.insert('0', json_dict['Gamma'])
+        if 'Molar Mass' in json_dict:
+            self.entry_molar_mass.delete('0', 'end')
+            self.entry_molar_mass.insert('0', json_dict['Molar Mass'])
+        if 'Particle Diameter' in json_dict:
+            self.entry_particle_diameter.delete('0', 'end')
+            self.entry_particle_diameter.insert('0', json_dict['Particle Diameter'])
+        if 'Viscosity' in json_dict:
+            self.entry_viscosity.delete('0', 'end')
+            self.entry_viscosity.insert('0', json_dict['Viscosity'])
+        if 'Temperature' in json_dict:
+            self.entry_temperature.delete('0', 'end')
+            self.entry_temperature.insert('0', json_dict['Temperature'])
+            self.combobox_units_temperature.set('(K)')
+        if 'Gas Constant' in json_dict:
+            self.entry_gas_constant.delete('0', 'end')
+            self.entry_gas_constant.insert('0', json_dict['Gas Constant'])
 
     def export_to_json(self):
         files = [('JSON Files', '*.json'),
