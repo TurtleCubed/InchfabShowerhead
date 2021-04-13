@@ -3,16 +3,10 @@ Inchfab showerhead is a python application that simulates gas flow in through a 
 mostly to optimize the dimensions of apertures to provide symmetric flow of gas to a vacuum chamber.
 
 ## Installation
-Pull this repository for the required files. Important dependencies include numpy, scipy, matplotlib, tkinter, and json.
-Download those with [pip](https://pip.pypa.io/en/stable/installing/).
-
-```bash
-pip install -r requirements.txt
-```
+Download and unzip the project in any location.
 
 ## Usage
-Run GUI.py from the commandline and use the GUI as shown
-```bash
-python GUI.py
-```
+In the dist folder, there is a file named InchfabShowerhead.exe. Run it as you would any other program.
+Make sure the GasData folder and blank.png are in the same location.
+
 ![](sample.jpg)
