@@ -14,9 +14,7 @@ class NewprojectApp:
         self.toplevel1.configure(height='200', width='200')
 
         self.labels = [None]*10
-        self.labels[0] = self.canvas1.create_text(50, 50, font=('', 20), text='0.044')
-
-        self.canvas1.itemconfig(self.labels[0], text='hi')
+        self.labels[0] = self.canvas1.create_image(50, 50, image=tk.PhotoImage(file='..\\blank.png'))
 
         # Main widget
         self.mainwindow = self.toplevel1

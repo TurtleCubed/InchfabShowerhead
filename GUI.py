@@ -21,6 +21,13 @@ class GUI:
         self.combobox_hole_shape = ttk.Combobox(self.frame1)
         self.combobox_hole_shape.configure(state='readonly', values='Circle Rectangle')
         self.combobox_hole_shape.grid(column='1', columnspan='3', pady='5', row='0')
+        self.scrollbar_canvas = ttk.Scrollbar(self.frame1)
+        self.scrollbar_canvas.configure(orient='vertical')
+        self.scrollbar_canvas.grid(column='8', ipady='300', row='0', rowspan='30')
+        self.canvas1 = tk.Canvas(self.frame1)
+        self.canvas1.configure(confine='true', height='800', scrollregion=(0, 0, 600, 1000), width='1000')
+        self.canvas1.grid(column='7', columnspan='1', row='0', rowspan='30')
+        self.canvas1.configure(yscrollcommand=self.scrollbar_canvas.set)
         self.label_hole_count = ttk.Label(self.frame1)
         self.label_hole_count.configure(text='Number of Openings')
         self.label_hole_count.grid(column='0', row='1', sticky='e')
@@ -84,48 +91,30 @@ class GUI:
         self.separator0 = ttk.Separator(self.frame1)
         self.separator0.configure(orient='horizontal')
         self.separator0.grid(column='0', columnspan='5', ipadx='150', pady='5', row='5')
-        self.label_connecting_shape = ttk.Label(self.frame1)
-        self.label_connecting_shape.configure(text='Connecting Tube Shape')
-        self.label_connecting_shape.grid(column='0', pady='5', row='6', sticky='e')
-        self.combobox_connecting_shape = ttk.Combobox(self.frame1)
-        self.combobox_connecting_shape.configure(state='readonly', values='Circle Rectangle')
-        self.combobox_connecting_shape.grid(column='1', columnspan='3', pady='5', row='6')
-        self.label_connecting_dim = ttk.Label(self.frame1)
-        self.label_connecting_dim.configure(text='Connecting Tube Diameter')
-        self.label_connecting_dim.grid(column='0', pady='5', row='7', sticky='e')
-        self.combobox_units_tubedim = ttk.Combobox(self.frame1)
-        self.combobox_units_tubedim.configure(state='readonly', values='(in.) (mil) (m) (mm)', width='8')
-        self.combobox_units_tubedim.grid(column='1', padx='5', row='7')
-        self.entry_connecting_dim = ttk.Entry(self.frame1)
-        self.entry_connecting_dim.configure(validate='key', width='10')
+        self.label_ring_tube_dim = ttk.Label(self.frame1)
+        self.label_ring_tube_dim.configure(text='Ring Tube Diameter')
+        self.label_ring_tube_dim.grid(column='0', pady='5', row='7', sticky='e')
+        self.combobox_units_ring_tube_dim = ttk.Combobox(self.frame1)
+        self.combobox_units_ring_tube_dim.configure(state='readonly', values='(in.) (mil) (m) (mm)', width='8')
+        self.combobox_units_ring_tube_dim.grid(column='1', padx='5', row='7')
+        self.entry_ring_tube_dim = ttk.Entry(self.frame1)
+        self.entry_ring_tube_dim.configure(validate='key', width='10')
         _text_ = '''0.125'''
-        self.entry_connecting_dim.delete('0', 'end')
-        self.entry_connecting_dim.insert('0', _text_)
-        self.entry_connecting_dim.grid(column='2', columnspan='3', pady='5', row='7')
-        self.label_connecting_width = ttk.Label(self.frame1)
-        self.label_connecting_width.configure(text='Connecting Tube Width')
-        self.label_connecting_width.grid(column='0', row='8', sticky='e')
-        self.combobox_units_tubewidth = ttk.Combobox(self.frame1)
-        self.combobox_units_tubewidth.configure(state='readonly', values='(in.) (mil) (m) (mm)', width='8')
-        self.combobox_units_tubewidth.grid(column='1', padx='5', row='8')
-        self.entry_connecting_width = ttk.Entry(self.frame1)
-        self.entry_connecting_width.configure(validate='key', width='10')
-        _text_ = '''0'''
-        self.entry_connecting_width.delete('0', 'end')
-        self.entry_connecting_width.insert('0', _text_)
-        self.entry_connecting_width.grid(column='2', columnspan='3', pady='5', row='8')
-        self.label_connecting_length = ttk.Label(self.frame1)
-        self.label_connecting_length.configure(text='Connecting Tube Length')
-        self.label_connecting_length.grid(column='0', pady='5', row='9', sticky='e')
-        self.combobox_units_tubelength = ttk.Combobox(self.frame1)
-        self.combobox_units_tubelength.configure(state='readonly', values='(in.) (mil) (m) (mm)', width='8')
-        self.combobox_units_tubelength.grid(column='1', padx='5', row='9')
-        self.entry_connecting_length = ttk.Entry(self.frame1)
-        self.entry_connecting_length.configure(validate='key', width='10')
-        _text_ = '''1.31'''
-        self.entry_connecting_length.delete('0', 'end')
-        self.entry_connecting_length.insert('0', _text_)
-        self.entry_connecting_length.grid(column='2', columnspan='3', pady='5', row='9')
+        self.entry_ring_tube_dim.delete('0', 'end')
+        self.entry_ring_tube_dim.insert('0', _text_)
+        self.entry_ring_tube_dim.grid(column='2', columnspan='3', pady='5', row='7')
+        self.label_ring_diameter = ttk.Label(self.frame1)
+        self.label_ring_diameter.configure(text='Ring Diameter')
+        self.label_ring_diameter.grid(column='0', pady='5', row='9', sticky='e')
+        self.combobox_units_ring_diameter = ttk.Combobox(self.frame1)
+        self.combobox_units_ring_diameter.configure(state='readonly', values='(in.) (mil) (m) (mm)', width='8')
+        self.combobox_units_ring_diameter.grid(column='1', padx='5', row='9')
+        self.entry_ring_diameter = ttk.Entry(self.frame1)
+        self.entry_ring_diameter.configure(validate='key', width='10')
+        _text_ = '''2.5'''
+        self.entry_ring_diameter.delete('0', 'end')
+        self.entry_ring_diameter.insert('0', _text_)
+        self.entry_ring_diameter.grid(column='2', columnspan='3', pady='5', row='9')
         self.separator1 = ttk.Separator(self.frame1)
         self.separator1.configure(orient='horizontal')
         self.separator1.grid(column='0', columnspan='5', ipadx='150', pady='5', row='10')
@@ -145,7 +134,8 @@ class GUI:
         self.label_chamber_pressure.configure(text='Chamber Pressure')
         self.label_chamber_pressure.grid(column='0', pady='5', row='12', sticky='e')
         self.combobox_units_pressure = ttk.Combobox(self.frame1)
-        self.combobox_units_pressure.configure(state='readonly', values='(millitorr) (torr) (atm) (bar) (Pa)', width='8')
+        self.combobox_units_pressure.configure(state='readonly', values='(millitorr) (torr) (atm) (bar) (Pa)',
+                                               width='8')
         self.combobox_units_pressure.grid(column='1', padx='5', row='12')
         self.entry_chamber_pressure = ttk.Entry(self.frame1)
         self.entry_chamber_pressure.configure(validate='key', width='10')
@@ -234,9 +224,6 @@ class GUI:
         self.combobox_units_temperature = ttk.Combobox(self.frame1)
         self.combobox_units_temperature.configure(state='readonly', values='(K) (C) (F)', width='8')
         self.combobox_units_temperature.grid(column='1', padx='5', row='20')
-        self.canvas1 = tk.Canvas(self.frame1)
-        self.canvas1.configure(height='800', width='1000')
-        self.canvas1.grid(column='7', columnspan='10', row='0', rowspan='30')
         self.frame1.configure(width='200')
         self.frame1.pack(side='top')
         self.toplevel1.configure(height='200', width='200')
@@ -366,9 +353,8 @@ class GUI:
         self.entry_hole5.config(validatecommand=vcmd)
         self.entry_hole_width.config(validatecommand=vcmd)
         self.entry_hole_length.config(validatecommand=vcmd)
-        self.entry_connecting_dim.config(validatecommand=vcmd)
-        self.entry_connecting_width.config(validatecommand=vcmd)
-        self.entry_connecting_length.config(validatecommand=vcmd)
+        self.entry_ring_tube_dim.config(validatecommand=vcmd)
+        self.entry_ring_diameter.config(validatecommand=vcmd)
         self.entry_throughput.config(validatecommand=vcmd)
         self.entry_chamber_pressure.config(validatecommand=vcmd)
         self.entry_gamma.config(validatecommand=vcmd)
@@ -384,21 +370,18 @@ class GUI:
             gas_list.append(file[0:file.index('.json')])
         self.combobox_gas.configure(state='readonly', values=gas_list)
         self.combobox_gas.bind('<<ComboboxSelected>>', self.on_gas_select)
+        self.scrollbar_canvas.config(command=self.canvas1.yview)
         self.scrollbar_x.configure(command=self.text1.xview)
         self.scrollbar_y.configure(command=self.text1.yview)
         self.text1.configure(xscrollcommand=self.scrollbar_x.set)
         self.text1.configure(yscrollcommand=self.scrollbar_y.set)
         self.combobox_hole_shape.bind('<<ComboboxSelected>>', self.on_hole_shape_select)
         self.combobox_hole_count.bind('<<ComboboxSelected>>', self.on_hole_count_select)
-        self.combobox_connecting_shape.bind('<<ComboboxSelected>>', self.on_connecting_shape_select)
         self.entry_hole4.grid_forget()
         self.entry_hole5.grid_forget()
         self.label_hole_width.grid_forget()
         self.entry_hole_width.grid_forget()
         self.combobox_units_holewidth.grid_forget()
-        self.label_connecting_width.grid_forget()
-        self.entry_connecting_width.grid_forget()
-        self.combobox_units_tubewidth.grid_forget()
         self.toplevel2.withdraw()
         self.toplevel2.protocol("WM_DELETE_WINDOW", self.on_sub_close)
         self.toplevel1.protocol("WM_DELETE_WINDOW", self.on_main_close)
@@ -418,16 +401,12 @@ class GUI:
         self.combobox_units_holelength.current('0')
         self.entry_hole_length.unit = '(in.)'
         self.combobox_units_holelength.bind('<<ComboboxSelected>>', self.on_unit_select)
-        self.combobox_connecting_shape.current('0')
-        self.combobox_units_tubedim.current('0')
-        self.entry_connecting_dim.unit = '(in.)'
-        self.combobox_units_tubedim.bind('<<ComboboxSelected>>', self.on_unit_select)
-        self.combobox_units_tubewidth.current('0')
-        self.entry_connecting_width.unit = '(in.)'
-        self.combobox_units_tubewidth.bind('<<ComboboxSelected>>', self.on_unit_select)
-        self.combobox_units_tubelength.current('0')
-        self.entry_connecting_length.unit = '(in.)'
-        self.combobox_units_tubelength.bind('<<ComboboxSelected>>', self.on_unit_select)
+        self.combobox_units_ring_tube_dim.current('0')
+        self.entry_ring_tube_dim.unit = '(in.)'
+        self.combobox_units_ring_tube_dim.bind('<<ComboboxSelected>>', self.on_unit_select)
+        self.combobox_units_ring_diameter.current('0')
+        self.entry_ring_diameter.unit = '(in.)'
+        self.combobox_units_ring_diameter.bind('<<ComboboxSelected>>', self.on_unit_select)
         self.combobox_units_throughput.current('0')
         self.entry_throughput.unit = '(sccm)'
         self.combobox_units_throughput.bind('<<ComboboxSelected>>', self.on_unit_select)
@@ -477,9 +456,9 @@ class GUI:
             try:
                 # Grab data from main window
                 if self.combobox_hole_shape.get() == 'Circle':
-                    shp_o = 'circle'
+                    shp_o = 'Circle'
                 elif self.combobox_hole_shape.get() == 'Rectangle':
-                    shp_o = 'rectangle'
+                    shp_o = 'Rectangle'
                 else:
                     raise ValueError("Aperture shape not selected")
                 dim_o = [float(self.entry_hole1.get()), float(self.entry_hole2.get()), float(self.entry_hole3.get())]
@@ -491,16 +470,10 @@ class GUI:
                 else:
                     pass
                 len_o = float(self.entry_hole_length.get())
-                if self.combobox_connecting_shape.get() == 'Circle':
-                    shp_c = 'circle'
-                elif self.combobox_connecting_shape.get() == 'Rectangle':
-                    shp_c = 'rectangle'
-                else:
-                    raise ValueError("Connecting pipe shape not selected")
+                shp_c = 'Circle'
                 width_o = float(self.entry_hole_width.get())
-                width_c = float(self.entry_connecting_width.get())
-                dim_c = float(self.entry_connecting_dim.get())
-                len_c = float(self.entry_connecting_length.get())
+                dim_c = float(self.entry_ring_tube_dim.get())
+                ring_d = float(self.entry_ring_diameter.get())
                 thr = float(self.entry_throughput.get())
                 ch_p = float(self.entry_chamber_pressure.get())
                 gam = float(self.entry_gamma.get())
@@ -515,9 +488,8 @@ class GUI:
                     dim_o[i] = self.convert(dim_o[i], self.combobox_units_holedim.get(), '(in.)')
                 width_o = self.convert(len_o, self.combobox_units_holewidth.get(), '(in.)')
                 len_o = self.convert(len_o, self.combobox_units_holelength.get(), '(in.)')
-                dim_c = self.convert(dim_c, self.combobox_units_tubedim.get(), '(in.)')
-                width_c = self.convert(width_c, self.combobox_units_tubewidth.get(), '(in.)')
-                len_c = self.convert(len_c, self.combobox_units_tubelength.get(), '(in.)')
+                dim_c = self.convert(dim_c, self.combobox_units_ring_tube_dim.get(), '(in.)')
+                ring_d = self.convert(ring_d, self.combobox_units_ring_diameter.get(), '(in.)')
                 thr = self.convert(thr, self.combobox_units_throughput.get(), '(sccm)')
                 ch_p = self.convert(ch_p, self.combobox_units_pressure.get(), '(millitorr)')
                 tem = self.convert(tem, self.combobox_units_temperature.get(), '(K)')
@@ -528,10 +500,8 @@ class GUI:
                 self.export_dict['Aperture Dimensions'] = dim_o
                 self.export_dict['Aperture Width'] = width_o
                 self.export_dict['Aperture Length'] = len_o
-                self.export_dict['Connecting Tube Shape'] = shp_c
-                self.export_dict['Connecting Tube Dimension'] = dim_c
-                self.export_dict['Connecting Tube Width'] = width_c
-                self.export_dict['Connecting Tube Length'] = len_c
+                self.export_dict['Ring Tube Diameter'] = dim_c
+                self.export_dict['Ring Diameter'] = ring_d
                 self.export_dict['Throughput'] = thr
                 self.export_dict['Chamber Pressure'] = ch_p
                 self.export_dict['Gamma'] = gam
@@ -549,8 +519,9 @@ class GUI:
             if run:
                 self.append_txt('Optimizing...\n')
                 try:
-                    optimized_dim = self.optimize(shp_o, dim_o, width_o, len_o, shp_c, dim_c, width_c,
-                                                  len_c, thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
+                    optimized_dim = self.optimize(shp_o, dim_o, width_o, len_o, shp_c, dim_c, 0,
+                                                  ring_d*np.pi/float(self.combobox_hole_count.get()),
+                                                  thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
                     self.update_text(self.entry_dim1, str(optimized_dim[0]))
                     self.update_text(self.entry_dim2, str(optimized_dim[1]))
                     self.update_text(self.entry_dim3, str(optimized_dim[2]))
@@ -583,9 +554,9 @@ class GUI:
             try:
                 # Grab data from main window
                 if self.combobox_hole_shape.get() == 'Circle':
-                    shp_o = 'circle'
+                    shp_o = 'Circle'
                 elif self.combobox_hole_shape.get() == 'Rectangle':
-                    shp_o = 'rectangle'
+                    shp_o = 'Rectangle'
                 else:
                     raise ValueError("Aperture shape not selected")
                 dim_o = [float(self.entry_hole1.get()), float(self.entry_hole2.get()), float(self.entry_hole3.get())]
@@ -597,16 +568,10 @@ class GUI:
                 else:
                     pass
                 len_o = float(self.entry_hole_length.get())
-                if self.combobox_connecting_shape.get() == 'Circle':
-                    shp_c = 'circle'
-                elif self.combobox_connecting_shape.get() == 'Rectangle':
-                    shp_c = 'rectangle'
-                else:
-                    raise ValueError("Connecting pipe shape not selected")
+                shp_c = 'Circle'
                 width_o = float(self.entry_hole_width.get())
-                width_c = float(self.entry_connecting_width.get())
-                dim_c = float(self.entry_connecting_dim.get())
-                len_c = float(self.entry_connecting_length.get())
+                dim_c = float(self.entry_ring_tube_dim.get())
+                ring_d = float(self.entry_ring_diameter.get())
                 thr = float(self.entry_throughput.get())
                 ch_p = float(self.entry_chamber_pressure.get())
                 gam = float(self.entry_gamma.get())
@@ -621,9 +586,8 @@ class GUI:
                     dim_o[i] = self.convert(dim_o[i], self.combobox_units_holedim.get(), '(in.)')
                 width_o = self.convert(len_o, self.combobox_units_holewidth.get(), '(in.)')
                 len_o = self.convert(len_o, self.combobox_units_holelength.get(), '(in.)')
-                dim_c = self.convert(dim_c, self.combobox_units_tubedim.get(), '(in.)')
-                width_c = self.convert(width_c, self.combobox_units_tubewidth.get(), '(in.)')
-                len_c = self.convert(len_c, self.combobox_units_tubelength.get(), '(in.)')
+                dim_c = self.convert(dim_c, self.combobox_units_ring_tube_dim.get(), '(in.)')
+                ring_d = self.convert(ring_d, self.combobox_units_ring_diameter.get(), '(in.)')
                 thr = self.convert(thr, self.combobox_units_throughput.get(), '(sccm)')
                 ch_p = self.convert(ch_p, self.combobox_units_pressure.get(), '(millitorr)')
                 tem = self.convert(tem, self.combobox_units_temperature.get(), '(K)')
@@ -634,10 +598,8 @@ class GUI:
                 self.export_dict['Aperture Dimensions'] = dim_o
                 self.export_dict['Aperture Width'] = width_o
                 self.export_dict['Aperture Length'] = len_o
-                self.export_dict['Connecting Tube Shape'] = shp_c
-                self.export_dict['Connecting Tube Dimension'] = dim_c
-                self.export_dict['Connecting Tube Width'] = width_c
-                self.export_dict['Connecting Tube Length'] = len_c
+                self.export_dict['Ring Tube Diameter'] = dim_c
+                self.export_dict['Ring Diameter'] = ring_d
                 self.export_dict['Throughput'] = thr
                 self.export_dict['Chamber Pressure'] = ch_p
                 self.export_dict['Gamma'] = gam
@@ -656,19 +618,24 @@ class GUI:
                 self.append_txt('Running once...\n')
                 q_tol = [None] * 5
                 try:
-                    q_tol[0] = GasNetworkSim.sim(shp_o, dim_o, width_o, len_o, shp_c, dim_c, width_c, len_c,
+                    q_tol[0] = GasNetworkSim.sim(shp_o, dim_o, width_o, len_o, shp_c, dim_c, 0,
+                                                 ring_d*np.pi/float(self.combobox_hole_count.get()),
                                                  thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
-                    q_tol[1] = GasNetworkSim.sim(shp_o, dim_o, width_o, len_o, shp_c, dim_c, width_c, len_c,
+                    q_tol[1] = GasNetworkSim.sim(shp_o, dim_o, width_o, len_o, shp_c, dim_c, 0,
+                                                 ring_d*np.pi/float(self.combobox_hole_count.get()),
                                                  thr * 2, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
-                    q_tol[2] = GasNetworkSim.sim(shp_o, dim_o, width_o, len_o, shp_c, dim_c, width_c, len_c,
+                    q_tol[2] = GasNetworkSim.sim(shp_o, dim_o, width_o, len_o, shp_c, dim_c, 0,
+                                                 ring_d*np.pi/float(self.combobox_hole_count.get()),
                                                  thr * 0.5, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
                     small_dim = dim_o.copy()
                     small_dim[0] -= 0.001
                     large_dim = dim_o.copy()
                     large_dim[0] += 0.001
-                    q_tol[3] = GasNetworkSim.sim(shp_o, small_dim, width_o, len_o, shp_c, dim_c, width_c, len_c,
+                    q_tol[3] = GasNetworkSim.sim(shp_o, small_dim, width_o, len_o, shp_c, dim_c, 0,
+                                                 ring_d*np.pi/float(self.combobox_hole_count.get()),
                                                  thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
-                    q_tol[4] = GasNetworkSim.sim(shp_o, large_dim, width_o, len_o, shp_c, dim_c, width_c, len_c,
+                    q_tol[4] = GasNetworkSim.sim(shp_o, large_dim, width_o, len_o, shp_c, dim_c, 0,
+                                                 ring_d*np.pi/float(self.combobox_hole_count.get()),
                                                  thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
                     self.successful_run = True
                 except RuntimeError or ValueError:
@@ -893,28 +860,11 @@ class GUI:
             self.entry_hole_width.unit = '(in.)'
         self.update_preview(None)
 
-    def on_connecting_shape_select(self, eventObject):
-        if self.combobox_connecting_shape.get() == 'Circle':
-            self.label_connecting_dim.config(text='Connecting Tube Diameter')
-            self.label_connecting_width.grid_forget()
-            self.combobox_units_tubewidth.grid_forget()
-            self.entry_connecting_width.grid_forget()
-            self.entry_connecting_width.insert('0', '0')
-            self.entry_connecting_width.delete('1', 'end')
-        else:
-            self.label_connecting_dim.config(text='Connecting Tube Height')
-            self.label_connecting_width.grid(column=0, row=8, sticky='e')
-            self.combobox_units_tubewidth.grid(column=1, row=8)
-            self.combobox_units_tubewidth.current('0')
-            self.entry_connecting_width.grid(column=2, row=8, columnspan=3)
-            self.entry_connecting_width.unit = '(in)'
-
     def update_preview(self, event):
         layout = self.combobox_hole_count.get() + 'Hole' + self.combobox_hole_shape.get()
         dim_unit = self.combobox_units_holedim.get()
-        width_unit = self.combobox_units_holewidth.get()
-        tube_dim_unit = self.combobox_units_tubedim.get()
-        ring_dim_unit = self.combobox_units_tubelength.get()
+        tube_dim_unit = self.combobox_units_ring_tube_dim.get()
+        ring_dim_unit = self.combobox_units_ring_diameter.get()
         through_unit = self.combobox_units_throughput.get()
 
         self.ring_image.config(file=os.path.join('Assets', layout + '3d.png'))
@@ -928,9 +878,9 @@ class GUI:
             self.canvas1.coords(self.labels[2], 748, 155)
             self.canvas1.itemconfig(self.labels[3], text='')
             self.canvas1.itemconfig(self.labels[4], text='')
-            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_ring_tube_dim.get() + ' ' + tube_dim_unit)
             self.canvas1.coords(self.labels[5], 110, 390)
-            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_ring_diameter.get() + ' ' + ring_dim_unit)
             self.canvas1.coords(self.labels[6], 500, 450)
             self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
             self.canvas1.coords(self.labels[7], 220, 570)
@@ -944,9 +894,9 @@ class GUI:
             self.canvas1.itemconfig(self.labels[3], text=self.entry_hole4.get() + ' ' + dim_unit)
             self.canvas1.coords(self.labels[3], 768, 173)
             self.canvas1.itemconfig(self.labels[4], text='')
-            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_ring_tube_dim.get() + ' ' + tube_dim_unit)
             self.canvas1.coords(self.labels[5], 110, 390)
-            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_ring_diameter.get() + ' ' + ring_dim_unit)
             self.canvas1.coords(self.labels[6], 500, 450)
             self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
             self.canvas1.coords(self.labels[7], 220, 570)
@@ -961,9 +911,9 @@ class GUI:
             self.canvas1.coords(self.labels[3], 670, 116)
             self.canvas1.itemconfig(self.labels[4], text=self.entry_hole5.get() + ' ' + dim_unit)
             self.canvas1.coords(self.labels[4], 776, 186)
-            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_ring_tube_dim.get() + ' ' + tube_dim_unit)
             self.canvas1.coords(self.labels[5], 110, 390)
-            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_ring_diameter.get() + ' ' + ring_dim_unit)
             self.canvas1.coords(self.labels[6], 500, 450)
             self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
             self.canvas1.coords(self.labels[7], 220, 570)
@@ -976,9 +926,9 @@ class GUI:
             self.canvas1.coords(self.labels[2], 785, 174)
             self.canvas1.itemconfig(self.labels[3], text='')
             self.canvas1.itemconfig(self.labels[4], text='')
-            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_ring_tube_dim.get() + ' ' + tube_dim_unit)
             self.canvas1.coords(self.labels[5], 80, 370)
-            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_ring_diameter.get() + ' ' + ring_dim_unit)
             self.canvas1.coords(self.labels[6], 500, 450)
             self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
             self.canvas1.coords(self.labels[7], 65, 510)
@@ -992,9 +942,9 @@ class GUI:
             self.canvas1.itemconfig(self.labels[3], text=self.entry_hole4.get() + ' ' + dim_unit)
             self.canvas1.coords(self.labels[3], 807, 190)
             self.canvas1.itemconfig(self.labels[4], text='')
-            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_ring_tube_dim.get() + ' ' + tube_dim_unit)
             self.canvas1.coords(self.labels[5], 80, 370)
-            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_ring_diameter.get() + ' ' + ring_dim_unit)
             self.canvas1.coords(self.labels[6], 500, 450)
             self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
             self.canvas1.coords(self.labels[7], 65, 510)
@@ -1009,9 +959,9 @@ class GUI:
             self.canvas1.coords(self.labels[3], 701, 122)
             self.canvas1.itemconfig(self.labels[4], text=self.entry_hole5.get() + ' ' + dim_unit)
             self.canvas1.coords(self.labels[4], 814, 200)
-            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_ring_tube_dim.get() + ' ' + tube_dim_unit)
             self.canvas1.coords(self.labels[5], 80, 370)
-            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_ring_diameter.get() + ' ' + ring_dim_unit)
             self.canvas1.coords(self.labels[6], 500, 450)
             self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
             self.canvas1.coords(self.labels[7], 65, 510)
@@ -1073,7 +1023,7 @@ class GUI:
             self.frame1.bell()
             return
         if 'Aperture Shape' in json_dict:
-            if json_dict['Aperture Shape'] == 'circle':
+            if json_dict['Aperture Shape'] == 'Circle':
                 self.combobox_hole_shape.set('Circle')
             else:
                 self.combobox_hole_shape.set('Rectangle')
@@ -1108,24 +1058,15 @@ class GUI:
             self.entry_hole_length.delete('0', 'end')
             self.entry_hole_length.insert('0', json_dict['Aperture Length'])
             self.combobox_units_holelength.set('(in.)')
-        if 'Connecting Tube Shape' in json_dict:
-            if json_dict['Connecting Tube Shape'] == 'circle':
-                self.combobox_connecting_shape.set('Circle')
-            else:
-                self.combobox_connecting_shape.set('Rectangle')
-            self.on_connecting_shape_select(None)
-        if 'Connecting Tube Dimension' in json_dict:
-            self.entry_connecting_dim.delete('0', 'end')
-            self.entry_connecting_dim.insert('0', json_dict['Connecting Tube Dimension'])
-            self.combobox_units_tubedim.set('(in.)')
-        if 'Connecting Tube Width' in json_dict:
-            self.entry_connecting_width.delete('0', 'end')
-            self.entry_connecting_width.insert('0', json_dict['Connecting Tube Width'])
-            self.combobox_units_tubewidth.set('(in.)')
-        if 'Connecting Tube Length' in json_dict:
-            self.entry_connecting_length.delete('0', 'end')
-            self.entry_connecting_length.insert('0', json_dict['Connecting Tube Length'])
-            self.combobox_units_tubelength.set('(in.)')
+        if 'Ring Tube Diameter' in json_dict:
+            self.entry_ring_tube_dim.delete('0', 'end')
+            self.entry_ring_tube_dim.insert('0', json_dict['Ring Tube Diameter'])
+            self.combobox_units_ring_tube_dim.set('(in.)')
+        
+        if 'Ring Diameter' in json_dict:
+            self.entry_ring_diameter.delete('0', 'end')
+            self.entry_ring_diameter.insert('0', json_dict['Ring Diameter'])
+            self.combobox_units_ring_diameter.set('(in.)')
         if 'Throughput' in json_dict:
             self.entry_throughput.delete('0', 'end')
             self.entry_throughput.insert('0', json_dict['Throughput'])

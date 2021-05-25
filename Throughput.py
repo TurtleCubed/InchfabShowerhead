@@ -71,7 +71,7 @@ def throughput_d(d, p_upstream, p_downstream, length, shape, n_c, temp, r_0, gam
 
 def throughput(r_e, p_upstream, p_downstream, length, shape, n_c, temp, r_0, gamma, mol_mass,
                particle_diameter, viscosity, a, b, d, ma_n=0.15, single_run=False):
-    if shape is "circle":
+    if shape is "Circle":
         radius = d / 2
         area = np.pi * np.power(radius, 2)
         perimeter = np.pi * d
@@ -79,7 +79,7 @@ def throughput(r_e, p_upstream, p_downstream, length, shape, n_c, temp, r_0, gam
         le = length * (1 + 1 / (3 + 3 * length / (7 * radius)))
         alpha = 1 / (1 + 3 * le / (8 * radius))
         ge = np.power(perimeter, 4) / (128 * np.power(np.pi, 3))
-    elif shape is "rectangle":
+    elif shape is "Rectangle":
         area = a * b
         perimeter = 2 * (a + b)
         d_h = 4 * area / perimeter
@@ -94,7 +94,7 @@ def throughput(r_e, p_upstream, p_downstream, length, shape, n_c, temp, r_0, gam
         le = length * (1+(1/(4+((4*length)/(7*a)))))
         alpha = w / ((le/a) + w)
         ge = (1/12) * (np.power(a*b, 3))/(np.power(a, 2) + np.power(b, 2) + 0.371*a*b)
-    elif shape is "annulus":
+    elif shape is "Annulus":
         # Probably not todo
         area = 0
         perimeter = 0
