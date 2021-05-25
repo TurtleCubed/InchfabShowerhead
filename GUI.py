@@ -13,6 +13,7 @@ class GUI:
     def __init__(self, master=None):
         # build ui
         self.toplevel1 = tk.Tk() if master is None else tk.Toplevel(master)
+
         self.frame1 = ttk.Frame(self.toplevel1)
         self.label_hole_shape = ttk.Label(self.frame1)
         self.label_hole_shape.configure(text='Aperture Shape')
@@ -132,7 +133,7 @@ class GUI:
         self.label_throughput.configure(text='Throughput')
         self.label_throughput.grid(column='0', pady='5', row='11', sticky='e')
         self.combobox_units_throughput = ttk.Combobox(self.frame1)
-        self.combobox_units_throughput.configure(state='readonly', values='(SCCM) (Pa*m^3/s)', width='8')
+        self.combobox_units_throughput.configure(state='readonly', values='(sccm) (Pa*m^3/s)', width='8')
         self.combobox_units_throughput.grid(column='1', padx='5', row='11')
         self.entry_throughput = ttk.Entry(self.frame1)
         self.entry_throughput.configure(validate='key', width='10')
@@ -144,8 +145,7 @@ class GUI:
         self.label_chamber_pressure.configure(text='Chamber Pressure')
         self.label_chamber_pressure.grid(column='0', pady='5', row='12', sticky='e')
         self.combobox_units_pressure = ttk.Combobox(self.frame1)
-        self.combobox_units_pressure.configure(state='readonly', values='(millitorr) (torr) (atm) (bar) (Pa)',
-                                               width='8')
+        self.combobox_units_pressure.configure(state='readonly', values='(millitorr) (torr) (atm) (bar) (Pa)', width='8')
         self.combobox_units_pressure.grid(column='1', padx='5', row='12')
         self.entry_chamber_pressure = ttk.Entry(self.frame1)
         self.entry_chamber_pressure.configure(validate='key', width='10')
@@ -234,6 +234,9 @@ class GUI:
         self.combobox_units_temperature = ttk.Combobox(self.frame1)
         self.combobox_units_temperature.configure(state='readonly', values='(K) (C) (F)', width='8')
         self.combobox_units_temperature.grid(column='1', padx='5', row='20')
+        self.canvas1 = tk.Canvas(self.frame1)
+        self.canvas1.configure(height='800', width='1000')
+        self.canvas1.grid(column='7', columnspan='10', row='0', rowspan='30')
         self.frame1.configure(width='200')
         self.frame1.pack(side='top')
         self.toplevel1.configure(height='200', width='200')
@@ -426,7 +429,7 @@ class GUI:
         self.entry_connecting_length.unit = '(in.)'
         self.combobox_units_tubelength.bind('<<ComboboxSelected>>', self.on_unit_select)
         self.combobox_units_throughput.current('0')
-        self.entry_throughput.unit = '(SCCM)'
+        self.entry_throughput.unit = '(sccm)'
         self.combobox_units_throughput.bind('<<ComboboxSelected>>', self.on_unit_select)
         self.combobox_units_pressure.current('0')
         self.entry_chamber_pressure.unit = '(millitorr)'
@@ -440,6 +443,24 @@ class GUI:
         self.notebook_tolerances.bind('<<NotebookTabChanged>>', self.on_tab_select)
         self.tol_dict = {}
         self.export_dict = {}
+
+        self.canvas1.config(bg='white')
+        self.ring_image = tk.PhotoImage(file=os.path.join('Assets', '6HoleCircle3d.png'))
+        self.canvas1.create_image(0, 120, image=self.ring_image, anchor='nw')
+        self.overlay = tk.PhotoImage(file=os.path.join('Assets', '6HoleCircleOverlay.png'))
+        self.canvas1.create_image(6, 4, image=self.overlay, anchor='nw')
+        self.labels = []
+        self.labels.append(self.canvas1.create_text(0, 0, font=('', 20), text=''))
+        self.labels.append(self.canvas1.create_text(0, 0, font=('', 20), text=''))
+        self.labels.append(self.canvas1.create_text(0, 0, font=('', 20), text=''))
+        self.labels.append(self.canvas1.create_text(0, 0, font=('', 20), text=''))
+        self.labels.append(self.canvas1.create_text(0, 0, font=('', 20), text=''))
+        self.labels.append(self.canvas1.create_text(0, 0, font=('', 20), text=''))
+        self.labels.append(self.canvas1.create_text(0, 0, font=('', 20), text=''))
+        self.labels.append(self.canvas1.create_text(0, 0, font=('', 20), text=''))
+        self.update_preview(None)
+
+        self.toplevel1.bind('<KeyPress>', self.update_preview)
 
         # Main widget
         self.mainwindow = self.toplevel1
@@ -497,7 +518,7 @@ class GUI:
                 dim_c = self.convert(dim_c, self.combobox_units_tubedim.get(), '(in.)')
                 width_c = self.convert(width_c, self.combobox_units_tubewidth.get(), '(in.)')
                 len_c = self.convert(len_c, self.combobox_units_tubelength.get(), '(in.)')
-                thr = self.convert(thr, self.combobox_units_throughput.get(), '(SCCM)')
+                thr = self.convert(thr, self.combobox_units_throughput.get(), '(sccm)')
                 ch_p = self.convert(ch_p, self.combobox_units_pressure.get(), '(millitorr)')
                 tem = self.convert(tem, self.combobox_units_temperature.get(), '(K)')
 
@@ -541,8 +562,8 @@ class GUI:
                     self.append_txt('...Finished!\n')
 
                     self.export_dict['Aperture Dimensions'] = optimized_dim
-
                     self.successful_run = True
+                    self.on_tab_select(None)
                 except (ValueError, RuntimeError):
                     self.append_txt('Run failed\n')
                     self.successful_run = False
@@ -603,7 +624,7 @@ class GUI:
                 dim_c = self.convert(dim_c, self.combobox_units_tubedim.get(), '(in.)')
                 width_c = self.convert(width_c, self.combobox_units_tubewidth.get(), '(in.)')
                 len_c = self.convert(len_c, self.combobox_units_tubelength.get(), '(in.)')
-                thr = self.convert(thr, self.combobox_units_throughput.get(), '(SCCM)')
+                thr = self.convert(thr, self.combobox_units_throughput.get(), '(sccm)')
                 ch_p = self.convert(ch_p, self.combobox_units_pressure.get(), '(millitorr)')
                 tem = self.convert(tem, self.combobox_units_temperature.get(), '(K)')
 
@@ -649,22 +670,23 @@ class GUI:
                                                  thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
                     q_tol[4] = GasNetworkSim.sim(shp_o, large_dim, width_o, len_o, shp_c, dim_c, width_c, len_c,
                                                  thr, ch_p, gam, mol_m, par_d, vis, tem, gas_r)
+                    self.successful_run = True
                 except RuntimeError or ValueError:
                     self.append_txt('...Run Failed\n')
-                    self.currently_running = False
                     self.successful_run = False
                     self.export_dict.clear()
                     self.tol_dict.clear()
-                self.append_txt('...Run Finished\n')
                 self.currently_running = False
-                self.successful_run = True
-                for i in range(len(q_tol)):
-                    qs = q_tol[i]
-                    cv = np.std(q_tol[i]) / np.mean(q_tol[i])
-                    image = self.generate_graph(q_tol[i], str(i))
-                    self.tol_dict[i] = {'Q': qs, 'CV': cv, 'IMAGE': image}
-                    self.export_dict['run_type' + str(i)] = {'Q': qs}
-                self.update_image(self.label_image, self.tol_dict[0]['IMAGE'])
+
+                if self.successful_run:
+                    self.append_txt('...Run Finished\n')
+                    for i in range(len(q_tol)):
+                        qs = q_tol[i]
+                        cv = np.std(q_tol[i]) / np.mean(q_tol[i])
+                        image = self.generate_graph(q_tol[i], str(i))
+                        self.tol_dict[i] = {'Q': qs, 'CV': cv, 'IMAGE': image}
+                        self.export_dict['run_type' + str(i)] = {'Q': qs}
+                    self.update_image(self.label_image, self.tol_dict[0]['IMAGE'])
 
     def optimize(self, shape_o, dim_o, width_o, length_o, shape_c, dim_c, width_c, length_c, throughput,
                  chamber_pressure, gamma, molar_mass, particle_diameter, viscosity, temp, r_0):
@@ -793,6 +815,7 @@ class GUI:
                 entry.delete('0', 'end')
                 entry.insert('0', str(new_value))
                 entry.unit = next
+        self.update_preview(None)
 
     def on_hole_count_select(self, event):
         if self.combobox_hole_count.get() == '6':
@@ -807,6 +830,7 @@ class GUI:
         else:
             self.entry_hole4.grid(column='5', row='2', padx='2')
             self.entry_hole5.grid(column='6', row='2', padx='2')
+        self.update_preview(None)
 
     def on_tab_select(self, event):
         if self.successful_run:
@@ -837,7 +861,7 @@ class GUI:
         px = 1/plt.rcParams['figure.dpi']
         plt.subplots(figsize=(500*px, 300*px))
         plt.xlabel('Opening')
-        plt.ylabel('Throughput (SCCM)')
+        plt.ylabel('Throughput (sccm)')
         plt.ylim(mean * 0.75, mean * 1.25)
         plt.plot(x, y)
         plt.plot(x, [mean] * len(q))
@@ -867,6 +891,7 @@ class GUI:
             self.combobox_units_holewidth.current('0')
             self.entry_hole_width.grid(column=2, row=3, columnspan=3)
             self.entry_hole_width.unit = '(in.)'
+        self.update_preview(None)
 
     def on_connecting_shape_select(self, eventObject):
         if self.combobox_connecting_shape.get() == 'Circle':
@@ -883,6 +908,113 @@ class GUI:
             self.combobox_units_tubewidth.current('0')
             self.entry_connecting_width.grid(column=2, row=8, columnspan=3)
             self.entry_connecting_width.unit = '(in)'
+
+    def update_preview(self, event):
+        layout = self.combobox_hole_count.get() + 'Hole' + self.combobox_hole_shape.get()
+        dim_unit = self.combobox_units_holedim.get()
+        width_unit = self.combobox_units_holewidth.get()
+        tube_dim_unit = self.combobox_units_tubedim.get()
+        ring_dim_unit = self.combobox_units_tubelength.get()
+        through_unit = self.combobox_units_throughput.get()
+
+        self.ring_image.config(file=os.path.join('Assets', layout + '3d.png'))
+        self.overlay.config(file=os.path.join('Assets', layout + 'Overlay.png'))
+        if layout == '6HoleCircle':
+            self.canvas1.itemconfig(self.labels[0], text=self.entry_hole1.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[0], 260, 155)
+            self.canvas1.itemconfig(self.labels[1], text=self.entry_hole2.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[1], 506, 87)
+            self.canvas1.itemconfig(self.labels[2], text=self.entry_hole3.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[2], 748, 155)
+            self.canvas1.itemconfig(self.labels[3], text='')
+            self.canvas1.itemconfig(self.labels[4], text='')
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.coords(self.labels[5], 110, 390)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.coords(self.labels[6], 500, 450)
+            self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
+            self.canvas1.coords(self.labels[7], 220, 570)
+        elif layout == '8HoleCircle':
+            self.canvas1.itemconfig(self.labels[0], text=self.entry_hole1.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[0], 243, 176)
+            self.canvas1.itemconfig(self.labels[1], text=self.entry_hole2.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[1], 395, 98)
+            self.canvas1.itemconfig(self.labels[2], text=self.entry_hole3.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[2], 613, 98)
+            self.canvas1.itemconfig(self.labels[3], text=self.entry_hole4.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[3], 768, 173)
+            self.canvas1.itemconfig(self.labels[4], text='')
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.coords(self.labels[5], 110, 390)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.coords(self.labels[6], 500, 450)
+            self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
+            self.canvas1.coords(self.labels[7], 220, 570)
+        elif layout == '10HoleCircle':
+            self.canvas1.itemconfig(self.labels[0], text=self.entry_hole1.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[0], 234, 186)
+            self.canvas1.itemconfig(self.labels[1], text=self.entry_hole2.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[1], 340, 116)
+            self.canvas1.itemconfig(self.labels[2], text=self.entry_hole3.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[2], 506, 90)
+            self.canvas1.itemconfig(self.labels[3], text=self.entry_hole4.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[3], 670, 116)
+            self.canvas1.itemconfig(self.labels[4], text=self.entry_hole5.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[4], 776, 186)
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.coords(self.labels[5], 110, 390)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.coords(self.labels[6], 500, 450)
+            self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
+            self.canvas1.coords(self.labels[7], 220, 570)
+        elif layout == '6HoleRectangle':
+            self.canvas1.itemconfig(self.labels[0], text=self.entry_hole1.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[0], 235, 168)
+            self.canvas1.itemconfig(self.labels[1], text=self.entry_hole2.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[1], 514, 87)
+            self.canvas1.itemconfig(self.labels[2], text=self.entry_hole3.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[2], 785, 174)
+            self.canvas1.itemconfig(self.labels[3], text='')
+            self.canvas1.itemconfig(self.labels[4], text='')
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.coords(self.labels[5], 80, 370)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.coords(self.labels[6], 500, 450)
+            self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
+            self.canvas1.coords(self.labels[7], 65, 510)
+        elif layout == '8HoleRectangle':
+            self.canvas1.itemconfig(self.labels[0], text=self.entry_hole1.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[0], 221, 188)
+            self.canvas1.itemconfig(self.labels[1], text=self.entry_hole2.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[1], 388, 99)
+            self.canvas1.itemconfig(self.labels[2], text=self.entry_hole3.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[2], 640, 99)
+            self.canvas1.itemconfig(self.labels[3], text=self.entry_hole4.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[3], 807, 190)
+            self.canvas1.itemconfig(self.labels[4], text='')
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.coords(self.labels[5], 80, 370)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.coords(self.labels[6], 500, 450)
+            self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
+            self.canvas1.coords(self.labels[7], 65, 510)
+        elif layout == '10HoleRectangle':
+            self.canvas1.itemconfig(self.labels[0], text=self.entry_hole1.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[0], 211, 204)
+            self.canvas1.itemconfig(self.labels[1], text=self.entry_hole2.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[1], 329, 124)
+            self.canvas1.itemconfig(self.labels[2], text=self.entry_hole3.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[2], 513, 87)
+            self.canvas1.itemconfig(self.labels[3], text=self.entry_hole4.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[3], 701, 122)
+            self.canvas1.itemconfig(self.labels[4], text=self.entry_hole5.get() + ' ' + dim_unit)
+            self.canvas1.coords(self.labels[4], 814, 200)
+            self.canvas1.itemconfig(self.labels[5], text=self.entry_connecting_dim.get() + ' ' + tube_dim_unit)
+            self.canvas1.coords(self.labels[5], 80, 370)
+            self.canvas1.itemconfig(self.labels[6], text=self.entry_connecting_length.get() + ' ' + ring_dim_unit)
+            self.canvas1.coords(self.labels[6], 500, 450)
+            self.canvas1.itemconfig(self.labels[7], text=self.entry_throughput.get() + ' ' + through_unit)
+            self.canvas1.coords(self.labels[7], 65, 510)
 
     def on_main_close(self):
         try:
@@ -997,7 +1129,7 @@ class GUI:
         if 'Throughput' in json_dict:
             self.entry_throughput.delete('0', 'end')
             self.entry_throughput.insert('0', json_dict['Throughput'])
-            self.combobox_units_throughput.set('(SCCM)')
+            self.combobox_units_throughput.set('(sccm)')
         if 'Chamber Pressure' in json_dict:
             self.entry_chamber_pressure.delete('0', 'end')
             self.entry_chamber_pressure.insert('0', json_dict['Chamber Pressure'])
@@ -1041,7 +1173,7 @@ class GUI:
             pass
         elif old_unit == '(mm)':
             value *= 0.001
-        elif old_unit == '(SCCM)':
+        elif old_unit == '(sccm)':
             value *= 101325 / (60 * 10 ** 6)
         elif old_unit == '(Pa*m^3/s)':
             pass
@@ -1070,7 +1202,7 @@ class GUI:
             pass
         elif new_unit == '(mm)':
             value /= 0.001
-        elif new_unit == '(SCCM)':
+        elif new_unit == '(sccm)':
             value /= (101325 / (60 * 10 ** 6))
         elif new_unit == '(Pa*m^3/s)':
             pass

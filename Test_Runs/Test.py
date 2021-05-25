@@ -1,31 +1,31 @@
-# importing all files  from tkinter
-from tkinter import *
-from tkinter import ttk
-import json
-
-# import only asksaveasfile from filedialog
-# which is used to save file in any extension
-from tkinter.filedialog import asksaveasfile
-
-root = Tk()
-root.geometry('200x150')
+import tkinter as tk
+import tkinter.ttk as ttk
 
 
-# function to call when user press
-# the save button, a filedialog will
-# open and ask to save file
-def save():
-    files = [('JSON Files', '*.json'),
-             ('All Files', '*.*')]
-    file = asksaveasfile(filetypes=files, defaultextension=files)
-    json_obj = json.dumps(dict, indent=4)
-    if file is None:
-        return
-    file.write(json_obj)
-    file.close()
+class NewprojectApp:
+    def __init__(self, master=None):
+        # build ui
+        self.toplevel1 = tk.Tk() if master is None else tk.Toplevel(master)
+        self.frame2 = ttk.Frame(self.toplevel1)
+        self.canvas1 = tk.Canvas(self.frame2)
+        self.canvas1.pack(side='top')
+        self.frame2.configure(height='200', width='200')
+        self.frame2.pack(side='top')
+        self.toplevel1.configure(height='200', width='200')
+
+        self.labels = [None]*10
+        self.labels[0] = self.canvas1.create_text(50, 50, font=('', 20), text='0.044')
+
+        self.canvas1.itemconfig(self.labels[0], text='hi')
+
+        # Main widget
+        self.mainwindow = self.toplevel1
 
 
-btn = ttk.Button(root, text='Save', command=save)
-btn.pack(side=TOP, pady=20)
+    def run(self):
+        self.mainwindow.mainloop()
 
-mainloop()
+if __name__ == '__main__':
+    app = NewprojectApp()
+    app.run()
+
